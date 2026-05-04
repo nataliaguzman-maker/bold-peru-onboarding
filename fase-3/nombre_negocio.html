@@ -20,10 +20,10 @@
       min-height: 100vh;
     }
 
-    /* ── Phone shell: 863px (incluye teclado) ── */
+    /* ── Phone shell ── */
     .phone {
       width: 393px;
-      height: 863px;
+      height: 852px;
       background: #F7F8FB;
       overflow: hidden;
       display: flex;
@@ -78,9 +78,6 @@
       font-size: 14px; line-height: 20px; color: #1E1E1E;
     }
 
-    /* Input activo */
-    .c-input-field--active { border-color: #121E6C !important; }
-
     /* ══ FOOTER ══ */
     .footer {
       flex-shrink: 0; display: flex; flex-direction: column;
@@ -97,48 +94,6 @@
     }
     .action-bar { display: flex; justify-content: space-between; align-items: center; }
     .btn-continuar { width: 140px; }
-
-    /* ══ iOS QWERTY KEYBOARD ══ */
-    .keyboard {
-      flex-shrink: 0; width: 100%; height: 290px;
-      background: #D1D3D9; position: relative; overflow: hidden;
-    }
-    .kb-rows {
-      position: absolute; left: 3px; right: 3px; top: 6px;
-      display: flex; flex-direction: column; gap: 13px;
-    }
-    .kb-row { display: flex; flex-direction: row; width: 100%; gap: 6px; }
-    .kb-ltr {
-      flex: 1; height: 46px; min-width: 0;
-      background: #FFFFFF; border-radius: 4.6px;
-      box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.30);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; user-select: none;
-      font-family: -apple-system, 'Helvetica Neue', sans-serif;
-      font-size: 17px; font-weight: 400; color: #000;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .kb-ltr:active { background: #ACB0BD; }
-    .kb-ltr--special {
-      flex: 0 0 44px; background: #ACB0BE; box-shadow: none; font-size: 13px;
-    }
-    .kb-ltr--special:active { background: #888D9A; }
-    .kb-row--mid { padding: 0 22px; }
-    .kb-ltr--space  { flex: 4; font-size: 15px; }
-    .kb-ltr--return {
-      flex: 0 0 80px; background: #ACB0BE; box-shadow: none; font-size: 15px;
-    }
-    .kb-ltr--return:active { background: #888D9A; }
-    .kb-ltr--shift-on {
-      background: #FFFFFF !important;
-      box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.30) !important;
-    }
-    .kb-home {
-      position: absolute; bottom: 8px; left: 50%;
-      transform: translateX(-50%);
-      width: 134px; height: 5px;
-      background: #1C1C1E; border-radius: 3px; opacity: 0.18;
-    }
 
     /* ══ AYUDA ══ */
     .ayuda-btn {
@@ -205,11 +160,12 @@
 
       <div class="c-form-group">
         <label class="c-input-label" for="inputNombre">Nombre de tu negocio</label>
-        <input class="c-input-field c-input-field--active" type="text" id="inputNombre"
-               inputmode="none" readonly
+        <input class="c-input-field" type="text" id="inputNombre"
                autocapitalize="words"
+               autocorrect="off"
                placeholder="Escribe el nombre de tu negocio"
-               onclick="onInputClick()">
+               autofocus
+               oninput="checkForm()">
       </div>
 
       <label class="c-checkbox-label">
@@ -246,47 +202,6 @@
     </div>
   </div>
 
-  <!-- ── iOS QWERTY KEYBOARD ── -->
-  <div class="keyboard" aria-hidden="true">
-    <div class="kb-rows">
-      <div class="kb-row">
-        <div class="kb-ltr" onclick="typeKey('q')">q</div><div class="kb-ltr" onclick="typeKey('w')">w</div>
-        <div class="kb-ltr" onclick="typeKey('e')">e</div><div class="kb-ltr" onclick="typeKey('r')">r</div>
-        <div class="kb-ltr" onclick="typeKey('t')">t</div><div class="kb-ltr" onclick="typeKey('y')">y</div>
-        <div class="kb-ltr" onclick="typeKey('u')">u</div><div class="kb-ltr" onclick="typeKey('i')">i</div>
-        <div class="kb-ltr" onclick="typeKey('o')">o</div><div class="kb-ltr" onclick="typeKey('p')">p</div>
-      </div>
-      <div class="kb-row kb-row--mid">
-        <div class="kb-ltr" onclick="typeKey('a')">a</div><div class="kb-ltr" onclick="typeKey('s')">s</div>
-        <div class="kb-ltr" onclick="typeKey('d')">d</div><div class="kb-ltr" onclick="typeKey('f')">f</div>
-        <div class="kb-ltr" onclick="typeKey('g')">g</div><div class="kb-ltr" onclick="typeKey('h')">h</div>
-        <div class="kb-ltr" onclick="typeKey('j')">j</div><div class="kb-ltr" onclick="typeKey('k')">k</div>
-        <div class="kb-ltr" onclick="typeKey('l')">l</div>
-      </div>
-      <div class="kb-row">
-        <div class="kb-ltr kb-ltr--special" id="kbShift" onclick="toggleShift()">⇧</div>
-        <div class="kb-ltr" onclick="typeKey('z')">z</div><div class="kb-ltr" onclick="typeKey('x')">x</div>
-        <div class="kb-ltr" onclick="typeKey('c')">c</div><div class="kb-ltr" onclick="typeKey('v')">v</div>
-        <div class="kb-ltr" onclick="typeKey('b')">b</div><div class="kb-ltr" onclick="typeKey('n')">n</div>
-        <div class="kb-ltr" onclick="typeKey('m')">m</div>
-        <div class="kb-ltr kb-ltr--special" onclick="deleteKey()">
-          <svg width="20" height="15" viewBox="0 0 24 18" fill="none">
-            <path d="M9.5 1H21C22.1 1 23 1.9 23 3V15C23 16.1 22.1 17 21 17H9.5C8.9 17 8.3 16.7 7.9 16.2L1.5 9L7.9 1.8C8.3 1.3 8.9 1 9.5 1Z" fill="none" stroke="#3C3C43" stroke-width="1.2" stroke-opacity="0.6"/>
-            <path d="M15 6L11 12M11 6L15 12" stroke="#3C3C43" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6"/>
-          </svg>
-        </div>
-      </div>
-      <div class="kb-row">
-        <div class="kb-ltr kb-ltr--special" onclick="typeKey('1')">1</div>
-        <div class="kb-ltr kb-ltr--special" onclick="typeKey('2')">2</div>
-        <div class="kb-ltr kb-ltr--space" onclick="typeKey(' ')">espacio</div>
-        <div class="kb-ltr kb-ltr--special" onclick="typeKey('.')">.</div>
-        <div class="kb-ltr kb-ltr--return" onclick="goNext()">return</div>
-      </div>
-    </div>
-    <div class="kb-home"></div>
-  </div>
-
   <!-- ── AYUDA ── -->
   <button class="ayuda-btn" aria-label="Ayuda">
     <span class="ayuda-btn__label">Ayuda</span>
@@ -300,54 +215,18 @@
 <script>
   const inputNombre = document.getElementById('inputNombre');
   const chkUsarNombre = document.getElementById('chkUsarNombre');
-  let shiftActive = true;
-
-  function setShift(on) {
-    shiftActive = on;
-    document.getElementById('kbShift').classList.toggle('kb-ltr--shift-on', on);
-  }
-  function toggleShift() { setShift(!shiftActive); }
-
-  function onInputClick() {
-    inputNombre.classList.add('c-input-field--active');
-    setShift(inputNombre.value.length === 0);
-  }
-
-  function typeKey(char) {
-    if (chkUsarNombre.checked) return;
-    if (char === ' ') {
-      inputNombre.value += ' ';
-      setShift(true);
-    } else if (inputNombre.value.length === 0 || shiftActive) {
-      inputNombre.value += char.toUpperCase();
-      setShift(false);
-    } else {
-      inputNombre.value += char.toLowerCase();
-    }
-    checkForm();
-  }
-
-  function deleteKey() {
-    if (chkUsarNombre.checked) return;
-    inputNombre.value = inputNombre.value.slice(0, -1);
-    const last = inputNombre.value.slice(-1);
-    setShift(inputNombre.value.length === 0 || last === ' ');
-    checkForm();
-  }
 
   function handleCheckbox() {
     if (chkUsarNombre.checked) {
       const nombre = localStorage.getItem('nombres') || '';
       inputNombre.value = 'Negocio de ' + nombre;
       inputNombre.readOnly = true;
-      inputNombre.classList.remove('c-input-field--active');
       inputNombre.classList.add('c-input-field--filled-disabled');
     } else {
       inputNombre.value = '';
-      inputNombre.readOnly = true;
+      inputNombre.readOnly = false;
       inputNombre.classList.remove('c-input-field--filled-disabled');
-      inputNombre.classList.add('c-input-field--active');
-      setShift(true);
+      inputNombre.focus();
     }
     checkForm();
   }
@@ -361,9 +240,6 @@
     localStorage.setItem('nombre_negocio', inputNombre.value.trim());
     window.location.href = 'formas_venta.html';
   }
-
-  // Foco inicial
-  onInputClick();
 </script>
 
 </body>
