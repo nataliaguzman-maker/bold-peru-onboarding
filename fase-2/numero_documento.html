@@ -20,10 +20,10 @@
       min-height: 100vh;
     }
 
-    /* ── Phone shell: 393 × 863 (includes keyboard) ── */
+    /* ── Phone shell ── */
     .phone {
       width: 393px;
-      height: 863px;
+      height: 852px;
       background: #F7F8FB;
       overflow: hidden;
       display: flex;
@@ -151,49 +151,6 @@
       width: 140px;
     }
 
-        .kb-numeric {
-      flex-shrink: 0; width: 100%; height: 290px;
-      background: #D1D3D9; position: relative; overflow: hidden;
-    }
-    .kb-num-rows {
-      position: absolute; left: 3px; right: 3px; top: 6px;
-      display: flex; flex-direction: column; gap: 12px;
-    }
-    .kb-num-row { display: flex; gap: 6px; }
-    .kb-num-key {
-      flex: 1; height: 55px;
-      background: #FFFFFF; border-radius: 4.6px;
-      box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.30);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      cursor: pointer; user-select: none; gap: 1px;
-      font-family: -apple-system, 'Helvetica Neue', sans-serif;
-      font-size: 22px; font-weight: 300; color: #000;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .kb-num-key:active { background: #ACB0BD; }
-    .kb-num-key__sub {
-      font-size: 9px; font-weight: 500; letter-spacing: 0.08em;
-      color: #000; line-height: 1;
-    }
-    .kb-num-key--special {
-      background: #ACB0BE; box-shadow: none;
-    }
-    .kb-num-key--special:active { background: #888D9A; }
-    .kb-num-key--empty {
-      background: #D1D3D9; box-shadow: none; pointer-events: none;
-    }
-
-
-    .kb-home {
-      position: absolute;
-      bottom: 8px; left: 50%;
-      transform: translateX(-50%);
-      width: 134px; height: 5px;
-      background: #1C1C1E;
-      border-radius: 3px;
-      opacity: 0.18;
-    }
-
     /* ══════════════════════════════════════
        AYUDA (floating)
        ══════════════════════════════════════ */
@@ -269,9 +226,12 @@
       <div class="c-form-group">
         <label class="c-input-label" for="inputDocumento" id="labelDocumento">Número de documento</label>
         <input class="c-input-field" type="text" id="inputDocumento"
-               inputmode="none"
+               inputmode="numeric"
+               autocorrect="off"
+               autocapitalize="none"
                placeholder="Ej. 12345678"
-               readonly
+               autofocus
+               oninput="checkForm()"
                aria-labelledby="labelDocumento">
       </div>
 
@@ -327,38 +287,6 @@
 
   </div><!-- /footer -->
 
-  <!-- ── iOS NUMERIC KEYBOARD ── -->
-  <div class="kb-numeric" id="kbNumeric" aria-hidden="true">
-    <div class="kb-num-rows">
-      <div class="kb-num-row">
-        <div class="kb-num-key" onclick="typeKey('1')">1<span class="kb-num-key__sub">&nbsp;</span></div>
-        <div class="kb-num-key" onclick="typeKey('2')">2<span class="kb-num-key__sub">ABC</span></div>
-        <div class="kb-num-key" onclick="typeKey('3')">3<span class="kb-num-key__sub">DEF</span></div>
-      </div>
-      <div class="kb-num-row">
-        <div class="kb-num-key" onclick="typeKey('4')">4<span class="kb-num-key__sub">GHI</span></div>
-        <div class="kb-num-key" onclick="typeKey('5')">5<span class="kb-num-key__sub">JKL</span></div>
-        <div class="kb-num-key" onclick="typeKey('6')">6<span class="kb-num-key__sub">MNO</span></div>
-      </div>
-      <div class="kb-num-row">
-        <div class="kb-num-key" onclick="typeKey('7')">7<span class="kb-num-key__sub">PQRS</span></div>
-        <div class="kb-num-key" onclick="typeKey('8')">8<span class="kb-num-key__sub">TUV</span></div>
-        <div class="kb-num-key" onclick="typeKey('9')">9<span class="kb-num-key__sub">WXYZ</span></div>
-      </div>
-      <div class="kb-num-row">
-        <div class="kb-num-key kb-num-key--empty"></div>
-        <div class="kb-num-key" onclick="typeKey('0')">0</div>
-        <div class="kb-num-key kb-num-key--special" onclick="deleteKey()">
-          <svg width="20" height="15" viewBox="0 0 24 18" fill="none">
-            <path d="M9.5 1H21C22.1 1 23 1.9 23 3V15C23 16.1 22.1 17 21 17H9.5C8.9 17 8.3 16.7 7.9 16.2L1.5 9L7.9 1.8C8.3 1.3 8.9 1 9.5 1Z" fill="none" stroke="#3C3C43" stroke-width="1.2" stroke-opacity="0.6"/>
-            <path d="M15 6L11 12M11 6L15 12" stroke="#3C3C43" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-    <div class="kb-home"></div>
-  </div>
-
   <!-- ── AYUDA ── -->
   <button class="ayuda-btn" aria-label="Ayuda">
     <span class="ayuda-btn__label">Ayuda</span>
@@ -397,18 +325,6 @@
   function goNext() {
     localStorage.setItem('numero_documento', input.value.trim());
     window.location.href = 'nombres.html';
-  }
-
-  function typeKey(char) {
-    input.value += char;
-    input.focus();
-    checkForm();
-  }
-
-  function deleteKey() {
-    input.value = input.value.slice(0, -1);
-    input.focus();
-    checkForm();
   }
 </script>
 
