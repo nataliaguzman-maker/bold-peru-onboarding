@@ -20,10 +20,10 @@
       min-height: 100vh;
     }
 
-    /* ── Phone shell: 393 × 863 (includes keyboard) ── */
+    /* ── Phone shell ── */
     .phone {
       width: 393px;
-      height: 863px;
+      height: 852px;
       background: #F7F8FB;
       overflow: hidden;
       display: flex;
@@ -247,102 +247,6 @@
     }
     .btn-continuar.enabled:active { opacity: 0.85; }
 
-        .kb-numeric {
-      flex-shrink: 0; width: 100%; height: 290px;
-      background: #D1D3D9; position: relative; overflow: hidden;
-    }
-    .kb-num-rows {
-      position: absolute; left: 3px; right: 3px; top: 6px;
-      display: flex; flex-direction: column; gap: 12px;
-    }
-    .kb-num-row { display: flex; gap: 6px; }
-    .kb-num-key {
-      flex: 1; height: 55px;
-      background: #FFFFFF; border-radius: 4.6px;
-      box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.30);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      cursor: pointer; user-select: none; gap: 1px;
-      font-family: -apple-system, 'Helvetica Neue', sans-serif;
-      font-size: 22px; font-weight: 300; color: #000;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .kb-num-key:active { background: #ACB0BD; }
-    .kb-num-key__sub {
-      font-size: 9px; font-weight: 500; letter-spacing: 0.08em;
-      color: #000; line-height: 1;
-    }
-    .kb-num-key--special {
-      background: #ACB0BE; box-shadow: none;
-    }
-    .kb-num-key--special:active { background: #888D9A; }
-    .kb-num-key--empty {
-      background: #D1D3D9; box-shadow: none; pointer-events: none;
-    }
-
-    .kb-home {
-      position: absolute;
-      bottom: 8px; left: 50%;
-      transform: translateX(-50%);
-      width: 134px; height: 5px;
-      background: #1C1C1E;
-      border-radius: 3px;
-      opacity: 0.18;
-    }
-
-    /* ══ Keyboard visibility ══ */
-    .keyboard { display: none; }
-    .keyboard.kb-active { display: block; }
-    .kb-numeric { display: none; }
-    .kb-numeric.kb-active { display: block; }
-
-    /* ══ iOS EMAIL KEYBOARD ══ */
-    .kb-email .kb-rows {
-      left: 3px;
-      right: 3px;
-      width: auto;
-    }
-    .kb-email .kb-row {
-      width: 100%;
-    }
-
-    .kb-row--letters { gap: 6px; padding: 0 3px; }
-    .kb-row--mid     { gap: 6px; padding: 0 22px; }
-    .kb-row--bottom  { gap: 6px; padding: 0 3px; }
-
-    .kb-ltr {
-      flex: 1;
-      height: 46px;
-      min-width: 0;
-      background: #FFFFFF;
-      border-radius: 4.6px;
-      box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.30);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; user-select: none;
-      font-family: -apple-system, 'Helvetica Neue', sans-serif;
-      font-size: 17px; font-weight: 400;
-      color: #000;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .kb-ltr:active { background: #ACB0BD; }
-
-    .kb-ltr--special {
-      flex: 0 0 44px;
-      background: #ACB0BE;
-      box-shadow: none;
-      font-size: 13px;
-    }
-    .kb-ltr--special:active { background: #888D9A; }
-
-    .kb-ltr--space  { flex: 4; font-size: 15px; }
-    .kb-ltr--at     { flex: 0 0 44px; }
-    .kb-ltr--dotcom { flex: 0 0 58px; font-size: 13px; }
-    .kb-ltr--return {
-      flex: 0 0 80px;
-      background: #ACB0BE; box-shadow: none;
-      font-size: 15px;
-    }
-    .kb-ltr--return:active { background: #888D9A; }
-
     /* ══ AYUDA floating button ══ */
     .ayuda-btn {
       position: absolute;
@@ -430,9 +334,11 @@
               id="phoneInput"
               class="input-field"
               type="tel"
+              inputmode="numeric"
               placeholder="Escribe tu número"
               maxlength="12"
-              autocomplete="off"
+              autocomplete="tel"
+              enterkeyhint="next"
               autofocus
               oninput="validate()"
             >
@@ -456,6 +362,7 @@
             autocomplete="off"
             autocapitalize="none"
             autocorrect="off"
+            enterkeyhint="done"
             oninput="validate()"
           >
           <span class="c-input-icon" id="emailCheck" aria-hidden="true">
@@ -474,7 +381,7 @@
 
       <!-- Checkboxes de consentimiento -->
       <div class="consent">
-        <label class="cb-row" onpointerdown="dismissKeyboard(event)">
+        <label class="cb-row">
           <input type="checkbox" id="check1" onchange="validate()">
           <span class="cb-box"></span>
           <span class="cb-label">Autorizo a Bold a tratar mis datos según la
@@ -482,7 +389,7 @@
           </span>
         </label>
 
-        <label class="cb-row" style="width:100%" onpointerdown="dismissKeyboard(event)">
+        <label class="cb-row" style="width:100%">
           <input type="checkbox" id="check2" onchange="validate()">
           <span class="cb-box"></span>
           <span class="cb-label">Acepto que me contacten por SMS y WhatsApp.</span>
@@ -501,95 +408,6 @@
         Continuar
       </button>
     </div>
-  </div>
-
-  <!-- ── iOS NUMERIC KEYBOARD ── -->
-  <div class="kb-numeric" id="kbNumeric" aria-hidden="true">
-    <div class="kb-num-rows">
-      <div class="kb-num-row">
-        <div class="kb-num-key" onclick="typeKey('1')">1<span class="kb-num-key__sub">&nbsp;</span></div>
-        <div class="kb-num-key" onclick="typeKey('2')">2<span class="kb-num-key__sub">ABC</span></div>
-        <div class="kb-num-key" onclick="typeKey('3')">3<span class="kb-num-key__sub">DEF</span></div>
-      </div>
-      <div class="kb-num-row">
-        <div class="kb-num-key" onclick="typeKey('4')">4<span class="kb-num-key__sub">GHI</span></div>
-        <div class="kb-num-key" onclick="typeKey('5')">5<span class="kb-num-key__sub">JKL</span></div>
-        <div class="kb-num-key" onclick="typeKey('6')">6<span class="kb-num-key__sub">MNO</span></div>
-      </div>
-      <div class="kb-num-row">
-        <div class="kb-num-key" onclick="typeKey('7')">7<span class="kb-num-key__sub">PQRS</span></div>
-        <div class="kb-num-key" onclick="typeKey('8')">8<span class="kb-num-key__sub">TUV</span></div>
-        <div class="kb-num-key" onclick="typeKey('9')">9<span class="kb-num-key__sub">WXYZ</span></div>
-      </div>
-      <div class="kb-num-row">
-        <div class="kb-num-key kb-num-key--empty"></div>
-        <div class="kb-num-key" onclick="typeKey('0')">0</div>
-        <div class="kb-num-key kb-num-key--special" onclick="deleteKey()">
-          <svg width="20" height="15" viewBox="0 0 24 18" fill="none">
-            <path d="M9.5 1H21C22.1 1 23 1.9 23 3V15C23 16.1 22.1 17 21 17H9.5C8.9 17 8.3 16.7 7.9 16.2L1.5 9L7.9 1.8C8.3 1.3 8.9 1 9.5 1Z" fill="none" stroke="#3C3C43" stroke-width="1.2" stroke-opacity="0.6"/>
-            <path d="M15 6L11 12M11 6L15 12" stroke="#3C3C43" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-    <div class="kb-home"></div>
-  </div>
-
-  <!-- ── iOS EMAIL KEYBOARD ── -->
-  <div class="keyboard kb-email" id="kbEmail" aria-hidden="true">
-    <div class="kb-rows">
-      <!-- Row 1: Q–P -->
-      <div class="kb-row kb-row--letters">
-        <div class="kb-ltr" onclick="typeKey('q')">q</div>
-        <div class="kb-ltr" onclick="typeKey('w')">w</div>
-        <div class="kb-ltr" onclick="typeKey('e')">e</div>
-        <div class="kb-ltr" onclick="typeKey('r')">r</div>
-        <div class="kb-ltr" onclick="typeKey('t')">t</div>
-        <div class="kb-ltr" onclick="typeKey('y')">y</div>
-        <div class="kb-ltr" onclick="typeKey('u')">u</div>
-        <div class="kb-ltr" onclick="typeKey('i')">i</div>
-        <div class="kb-ltr" onclick="typeKey('o')">o</div>
-        <div class="kb-ltr" onclick="typeKey('p')">p</div>
-      </div>
-      <!-- Row 2: A–L (9 keys, centered) -->
-      <div class="kb-row kb-row--mid">
-        <div class="kb-ltr" onclick="typeKey('a')">a</div>
-        <div class="kb-ltr" onclick="typeKey('s')">s</div>
-        <div class="kb-ltr" onclick="typeKey('d')">d</div>
-        <div class="kb-ltr" onclick="typeKey('f')">f</div>
-        <div class="kb-ltr" onclick="typeKey('g')">g</div>
-        <div class="kb-ltr" onclick="typeKey('h')">h</div>
-        <div class="kb-ltr" onclick="typeKey('j')">j</div>
-        <div class="kb-ltr" onclick="typeKey('k')">k</div>
-        <div class="kb-ltr" onclick="typeKey('l')">l</div>
-      </div>
-      <!-- Row 3: ⇧  Z–M  ⌫ -->
-      <div class="kb-row kb-row--letters">
-        <div class="kb-ltr kb-ltr--special" style="flex:0 0 44px">⇧</div>
-        <div class="kb-ltr" onclick="typeKey('z')">z</div>
-        <div class="kb-ltr" onclick="typeKey('x')">x</div>
-        <div class="kb-ltr" onclick="typeKey('c')">c</div>
-        <div class="kb-ltr" onclick="typeKey('v')">v</div>
-        <div class="kb-ltr" onclick="typeKey('b')">b</div>
-        <div class="kb-ltr" onclick="typeKey('n')">n</div>
-        <div class="kb-ltr" onclick="typeKey('m')">m</div>
-        <div class="kb-ltr kb-ltr--special" style="flex:0 0 44px" onclick="deleteKey()">
-          <svg width="20" height="15" viewBox="0 0 24 18" fill="none">
-            <path d="M9.5 1H21C22.1 1 23 1.9 23 3V15C23 16.1 22.1 17 21 17H9.5C8.9 17 8.3 16.7 7.9 16.2L1.5 9L7.9 1.8C8.3 1.3 8.9 1 9.5 1Z" fill="none" stroke="#3C3C43" stroke-width="1.2" stroke-opacity="0.6"/>
-            <path d="M15 6L11 12M11 6L15 12" stroke="#3C3C43" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6"/>
-          </svg>
-        </div>
-      </div>
-      <!-- Row 4: 123 | space | @ | .com | return -->
-      <div class="kb-row kb-row--bottom">
-        <div class="kb-ltr kb-ltr--special kb-ltr--return" style="flex:0 0 44px">123</div>
-        <div class="kb-ltr kb-ltr--space" onclick="typeKey(' ')">espacio</div>
-        <div class="kb-ltr kb-ltr--at" onclick="typeKey('@')">@</div>
-        <div class="kb-ltr kb-ltr--dotcom" onclick="typeKey('.com')">.com</div>
-        <div class="kb-ltr kb-ltr--return">return</div>
-      </div>
-    </div>
-    <div class="kb-home"></div>
   </div>
 
   <!-- ── AYUDA floating button ── -->
@@ -612,21 +430,6 @@
   const emailErrorIcon = document.getElementById('emailErrorIcon');
   const emailErrorMsg  = document.getElementById('emailErrorMsg');
   const btnContinuar   = document.getElementById('btnContinuar');
-  const kbNumeric      = document.getElementById('kbNumeric');
-  const kbEmail        = document.getElementById('kbEmail');
-
-  let activeInput = phoneInput;
-
-  /* ── Keyboard show / hide ── */
-  function showKeyboard(type) {
-    kbNumeric.classList.toggle('kb-active', type === 'numeric');
-    kbEmail.classList.toggle('kb-active',   type === 'email');
-  }
-
-  function hideKeyboard() {
-    kbNumeric.classList.remove('kb-active');
-    kbEmail.classList.remove('kb-active');
-  }
 
   /* ── Error state helpers ── */
   function setPhoneError(on) {
@@ -643,10 +446,8 @@
     if (on) emailCheck.classList.remove('c-visible');
   }
 
-  /* Phone focus → show numeric keyboard, clear error */
+  /* Phone focus → clear error */
   phoneInput.addEventListener('focus', () => {
-    activeInput = phoneInput;
-    showKeyboard('numeric');
     setPhoneError(false);
   });
 
@@ -657,10 +458,13 @@
     }
   });
 
-  /* Email focus → hide virtual keyboard (native iOS keyboard handles input), clear error */
+  /* Enter on phone → move focus to email */
+  phoneInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); emailInput.focus(); }
+  });
+
+  /* Email focus → clear error */
   emailInput.addEventListener('focus', () => {
-    activeInput = emailInput;
-    hideKeyboard();
     setEmailError(false);
     emailCheck.classList.remove('c-visible');
   });
@@ -672,12 +476,6 @@
     }
   });
 
-  /* Checkbox tap: blur active input and hide keyboard */
-  function dismissKeyboard(e) {
-    if (document.activeElement) document.activeElement.blur();
-    hideKeyboard();
-  }
-
   /* Pre-fill from localStorage, then auto-focus phone */
   window.addEventListener('load', () => {
     const savedPhone = localStorage.getItem('celular');
@@ -685,7 +483,6 @@
     if (savedPhone) phoneInput.value = savedPhone;
     if (savedEmail) emailInput.value = savedEmail;
     phoneInput.focus();
-    showKeyboard('numeric');
     validate();
   });
 
@@ -697,16 +494,13 @@
     return /@(gmail|hotmail|yahoo)\.com$/i.test(v.trim());
   }
 
-  /* validate() is called on-input: updates button state and green check only */
   function validate() {
     const phoneOk = isPhoneValid(phoneInput.value);
     const emailOk = isEmailValid(emailInput.value);
     const c1 = document.getElementById('check1').checked;
     const c2 = document.getElementById('check2').checked;
 
-    /* Green check appears while typing once email is valid */
     emailCheck.classList.toggle('c-visible', emailOk && emailInput.value.length > 0);
-    /* Clear error icon when user corrects the field mid-typing */
     if (phoneOk) setPhoneError(false);
     if (emailOk) setEmailError(false);
 
@@ -719,33 +513,6 @@
     localStorage.setItem('celular', phoneInput.value);
     localStorage.setItem('correo', emailInput.value);
     window.location.href = 'clave.html';
-  }
-
-  /* ── Virtual keyboard typing ── */
-  function typeKey(chars) {
-    const el = activeInput;
-    const start = el.selectionStart ?? el.value.length;
-    const end   = el.selectionEnd   ?? el.value.length;
-    el.value = el.value.slice(0, start) + chars + el.value.slice(end);
-    const pos = start + chars.length;
-    el.setSelectionRange(pos, pos);
-    el.focus();
-    validate();
-  }
-
-  function deleteKey() {
-    const el = activeInput;
-    const start = el.selectionStart ?? el.value.length;
-    const end   = el.selectionEnd   ?? el.value.length;
-    if (start !== end) {
-      el.value = el.value.slice(0, start) + el.value.slice(end);
-      el.setSelectionRange(start, start);
-    } else if (start > 0) {
-      el.value = el.value.slice(0, start - 1) + el.value.slice(start);
-      el.setSelectionRange(start - 1, start - 1);
-    }
-    el.focus();
-    validate();
   }
 </script>
 
