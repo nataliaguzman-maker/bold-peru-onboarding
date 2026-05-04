@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=393, initial-scale=1">
+  <title>Bold – Biometría</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../components/shared.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #D0D3E0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 0;
+      min-height: 100vh;
+    }
+
+    /* ── Phone shell: 393 × 852 ── */
+    .phone {
+      width: 393px;
+      height: 852px;
+      background: #F7F8FB;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+
+    .header, .body, .btn-cluster, .ayuda-btn {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ══════════════════════════════════════
+       HEADER
+       ══════════════════════════════════════ */
+    .header {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-bottom: 16px;
+    }
+
+    .status-bar {
+      height: 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+    }
+    .status-bar__time {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      font-family: Roboto, sans-serif;
+      font-weight: 600; font-size: 12px; color: #1E1E1E; line-height: 1;
+    }
+    .status-bar__right {
+      position: absolute; right: 5px; top: 50%;
+      transform: translateY(-50%);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .status-bar__carrier {
+      font-family: Roboto, sans-serif;
+      font-weight: 400; font-size: 12px;
+      letter-spacing: -0.0014em; color: #1E1E1E; line-height: 1;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 12px;
+    }
+    .nav-left  { width: 102px; display: flex; align-items: center; }
+    .nav-center { flex: 1; }
+    .nav-right  { width: 102px; display: flex; justify-content: flex-end; }
+
+    /* ══════════════════════════════════════
+       BODY — vertically centred
+       ══════════════════════════════════════ */
+    .body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 48px;
+      padding: 0 16px;
+    }
+
+    /* ── Face ID illustration ── */
+    .ill-wrap {
+      position: relative;
+      width: 285px;
+      height: 178px;
+      flex-shrink: 0;
+    }
+
+    /* Main card (left 57.61px, top 8px) */
+    .ill-card {
+      position: absolute;
+      left: 58px; top: 8px;
+      width: 164px; height: 164px;
+      border-radius: 48px;
+      background: url('ill_card_bg.png') center / cover no-repeat;
+      box-shadow: 0px 4px 12px 0px rgba(18, 30, 108, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .ill-card__icon {
+      width: 80px; height: 80px;
+    }
+
+    /* Frosted glass pills */
+    .ill-pill {
+      position: absolute;
+      z-index: 1;
+      border-radius: 37.72px;
+      background:
+        rgba(255, 255, 255, 0.08),
+        linear-gradient(-43deg, rgba(8, 14, 255, 0.1) 10%, rgba(8, 14, 255, 0.03) 33%, rgba(255, 255, 255, 0.03) 44%, rgba(8, 14, 255, 0.2) 98%),
+        rgba(247, 248, 251, 0.2);
+      border: 0.686px solid #D2D4E1;
+      box-shadow: inset 0.686px 0.686px 11.04px 0px rgba(18, 30, 108, 0.1);
+      backdrop-filter: blur(24.96px);
+      -webkit-backdrop-filter: blur(24.96px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Left pill: x:0, y:0, 106×47 */
+    .ill-pill--left {
+      left: 0; top: 0;
+      width: 106px; height: 47px;
+    }
+    /* Right pill: x:180, y:131, 105×47 */
+    .ill-pill--right {
+      left: 180px; top: 131px;
+      width: 105px; height: 47px;
+    }
+
+    /* ── Text section ── */
+    .text-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-self: stretch;
+      padding: 0 16px;
+      text-align: center;
+    }
+    .title {
+      font-family: Montserrat, sans-serif;
+      font-weight: 600; font-size: 20px; line-height: 24px; color: #1E1E1E;
+    }
+    .subtitle {
+      font-family: Montserrat, sans-serif;
+      font-weight: 400; font-size: 14px; line-height: 20px; color: #1E1E1E;
+    }
+
+    /* ══════════════════════════════════════
+       BUTTON CLUSTER — bottom, flush
+       ══════════════════════════════════════ */
+    .btn-cluster {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px 16px;
+    }
+
+    /* Primary — "Activar Face ID" */
+    .btn-primary {
+      width: 100%; height: 48px;
+      background: #FF2947;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 100px;
+      font-family: Montserrat, sans-serif;
+      font-weight: 700; font-size: 14px; line-height: 20px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-primary:active { opacity: 0.85; }
+
+    /* Secondary — "Ahora no"  Link/Small */
+    .btn-link {
+      background: none; border: none;
+      font-family: Montserrat, sans-serif;
+      font-weight: 700; font-size: 12px; line-height: 16px;
+      color: #121E6C;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      cursor: pointer;
+      padding: 12px 0;
+    }
+    .btn-link:active { opacity: 0.7; }
+
+    /* ══════════════════════════════════════
+       AYUDA floating button
+       ══════════════════════════════════════ */
+    .ayuda-btn {
+      position: absolute;
+      top: 40px; right: 16px;
+      display: flex; flex-direction: row;
+      align-items: center; gap: 4px;
+      padding: 8px 8px 8px 12px;
+      background: #FFFFFF; border: none;
+      border-radius: 100px;
+      box-shadow: 0px 4px 12px 0px rgba(18, 30, 108, 0.08);
+      cursor: pointer; height: 32px; z-index: 10;
+    }
+    .ayuda-btn__label {
+      font-family: Montserrat, sans-serif;
+      font-weight: 500; font-size: 14px; line-height: 20px; color: #121E6C;
+    }
+    .ayuda-btn__icon {
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ══════════════════════════════════════
+       MODAL DE PERMISOS DE BIOMETRÍA
+       (hoja nativa estilo iOS)
+       ══════════════════════════════════════ */
+    .bio-modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.45s ease-out;
+      display: flex;
+      align-items: flex-end;
+    }
+    .bio-modal-overlay.is-open,
+    .bio-modal-overlay.is-scanning {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .bio-modal {
+      width: 100%;
+      background: #FFFFFF;
+      border-radius: 16px 16px 0 0;
+      transform: translateY(100%);
+      transition: transform 0.52s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bio-modal-overlay.is-open .bio-modal {
+      transform: translateY(0);
+    }
+    /* El modal se desliza hacia abajo al entrar en estado scanning */
+    .bio-modal-overlay.is-scanning .bio-modal {
+      transform: translateY(110%);
+    }
+
+    /* Contenedor de la animación Face ID sobre el overlay */
+    .bio-scan-wrap {
+      position: absolute;
+      top: 52px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      /* Aparece después de que el modal termina de deslizarse */
+      transition: opacity 0.3s ease 0.4s;
+    }
+    .bio-modal-overlay.is-scanning .bio-scan-wrap {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .bio-modal__handle {
+      width: 36px; height: 5px;
+      background: rgba(60, 60, 67, 0.3);
+      border-radius: 3px;
+      margin: 8px auto 0;
+    }
+    .bio-modal__header {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
+    }
+    .bio-modal__header-icon {
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .bio-modal__header-title {
+      flex: 1;
+      text-align: center;
+      font-family: -apple-system, system-ui, sans-serif;
+      font-size: 13px; font-weight: 600;
+      color: #3C3C43; letter-spacing: -0.08px;
+    }
+    .bio-modal__close {
+      width: 28px; height: 28px;
+      background: rgba(118, 118, 128, 0.12);
+      border: none; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; padding: 0; flex-shrink: 0;
+    }
+    .bio-modal__close:active { opacity: 0.7; }
+
+    .bio-modal__body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 24px 24px 0;
+      text-align: center;
+    }
+    .bio-modal__faceid-icon {
+      width: 56px;
+      height: 56px;
+    }
+    /* ── Animación Face ID — fotogramas Figma ── */
+    .faceid-frame-img {
+      width: 280px;
+      height: auto;
+      display: block;
+    }
+    .bio-modal__title {
+      font-family: -apple-system, system-ui, sans-serif;
+      font-size: 17px; font-weight: 700;
+      line-height: 22px; color: #000000;
+      letter-spacing: -0.41px;
+    }
+    .bio-modal__desc {
+      font-family: -apple-system, system-ui, sans-serif;
+      font-size: 13px; font-weight: 400;
+      line-height: 18px; color: #3C3C43;
+      letter-spacing: -0.08px;
+    }
+
+    .bio-modal__actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 20px 28px;
+    }
+    .bio-modal__btn-continue {
+      width: 100%; height: 50px;
+      background: #007AFF; color: #FFFFFF;
+      border: none; border-radius: 12px;
+      font-family: -apple-system, system-ui, sans-serif;
+      font-size: 17px; font-weight: 600;
+      letter-spacing: -0.41px;
+      cursor: pointer; transition: opacity 0.15s;
+    }
+    .bio-modal__btn-continue:active { opacity: 0.85; }
+    .bio-modal__btn-options {
+      background: none; border: none;
+      font-family: -apple-system, system-ui, sans-serif;
+      font-size: 15px; font-weight: 400;
+      color: #007AFF; cursor: pointer;
+      padding: 4px 0; letter-spacing: -0.24px;
+    }
+    .bio-modal__btn-options:active { opacity: 0.7; }
+  </style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="status-bar">
+      <span class="status-bar__time">1:11 PM</span>
+      <div class="status-bar__right">
+        <svg width="17" height="11" viewBox="0 0 17 11" fill="none" aria-hidden="true">
+          <rect x="0"  y="7"    width="3.1" height="4"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="4"  y="5"    width="3.1" height="6"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="8"  y="3"    width="3.1" height="8"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="12" y="0.5"  width="3.1" height="10.5" rx="0.5" fill="#1E1E1E"/>
+        </svg>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+          <circle cx="8" cy="10.5" r="1.3" fill="#1E1E1E"/>
+          <path d="M4.8 7.5C5.8 6.5 6.9 6 8 6s2.2.5 3.2 1.5"  stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          <path d="M2.2 5C3.7 3.4 5.8 2.5 8 2.5s4.3.9 5.8 2.5" stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          <path d="M0 2.5C2.1.9 4.9 0 8 0s5.9.9 8 2.5"          stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="status-bar__carrier">Carrier</span>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <div class="nav-left">
+        <button class="c-btn-close"
+                onclick="window.location.href='../index.html?skip_location=true'"
+                aria-label="Cerrar">
+          <img src="../components/ic_close.svg" width="24" height="24" alt="">
+        </button>
+      </div>
+      <div class="nav-center"></div>
+      <div class="nav-right"></div>
+    </div>
+  </div>
+
+  <!-- ── BODY ── -->
+  <div class="body">
+
+    <!-- Face ID illustration -->
+    <div class="ill-wrap" aria-hidden="true">
+
+      <!-- Left pill (x:0, y:0) — password/key icon -->
+      <div class="ill-pill ill-pill--left">
+        <img src="ic_password.svg" width="21" height="21" alt="">
+      </div>
+
+      <!-- Main card (x:58, y:8) — Face ID scan -->
+      <div class="ill-card">
+        <img class="ill-card__icon" src="ic_face_id_white.svg" width="80" height="80" alt="">
+      </div>
+
+      <!-- Right pill (x:180, y:131) — person icon -->
+      <div class="ill-pill ill-pill--right">
+        <img src="ic_people.svg" width="21" height="21" alt="">
+      </div>
+
+    </div>
+
+    <!-- Title + body text -->
+    <div class="text-section">
+      <h1 class="title">Ahora activa tu Face ID</h1>
+      <p class="subtitle">Podrás ingresar rápido a la App Bold y mantener tu dinero más seguro.</p>
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- ── BUTTON CLUSTER ── -->
+  <div class="btn-cluster">
+    <button class="btn-primary" onclick="activarFaceID()">
+      Activar Face ID
+    </button>
+    <button class="btn-link" onclick="window.location.href='bienvenida.html'">
+      Ahora no
+    </button>
+  </div>
+
+  <!-- ── MODAL DE PERMISOS DE BIOMETRÍA ── -->
+  <div class="bio-modal-overlay" id="bioModalOverlay">
+
+    <!-- Animación Face ID sobre el overlay (visible solo en estado is-scanning) -->
+    <div class="bio-scan-wrap">
+      <img class="faceid-frame-img" id="faceidFrame" src="faceid_frame1.png" alt="" aria-hidden="true">
+    </div>
+    <div class="bio-modal" role="dialog" aria-modal="true" aria-labelledby="bioModalTitle">
+
+      <div class="bio-modal__handle"></div>
+
+      <!-- Encabezado -->
+      <div class="bio-modal__header">
+        <div class="bio-modal__header-icon">
+          <!-- Ícono persona con candado -->
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <circle cx="8.5" cy="6.5" r="3" fill="#8E8E93"/>
+            <path d="M1.5 17.5c0-3.59 3.134-6.5 7-6.5 1.737 0 3.33.61 4.566 1.617" fill="#8E8E93"/>
+            <rect x="11.5" y="12" width="9.5" height="9" rx="2.5" fill="#007AFF"/>
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M16.25 13.5a1.75 1.75 0 00-1.75 1.75v.5h-.5a.5.5 0 00-.5.5v3.5a.5.5 0 00.5.5h4a.5.5 0 00.5-.5v-3.5a.5.5 0 00-.5-.5h-.5v-.5a1.75 1.75 0 00-1.75-1.75zm.625 3.875a.625.625 0 11-1.25 0 .625.625 0 011.25 0zM15.5 17v-.75a.75.75 0 011.5 0V17h-1.5z"
+              fill="white"/>
+          </svg>
+        </div>
+        <span class="bio-modal__header-title">Iniciar sesión</span>
+        <button class="bio-modal__close" onclick="closeBiometricModal()" aria-label="Cerrar">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M1 1l8 8M9 1L1 9" stroke="#3C3C43" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Cuerpo -->
+      <div class="bio-modal__body">
+        <img class="bio-modal__faceid-icon" src="ic_face_id.svg" alt="" aria-hidden="true">
+        <h2 id="bioModalTitle" class="bio-modal__title">¿Usar Face ID para iniciar sesión?</h2>
+        <p class="bio-modal__desc" id="bioModalDesc"></p>
+      </div>
+
+      <!-- Acciones -->
+      <div class="bio-modal__actions">
+        <button class="bio-modal__btn-continue" onclick="confirmBiometric()">Continuar</button>
+      </div>
+
+    </div>
+  </div><!-- /modal de permisos de biometría -->
+
+  <!-- ── AYUDA floating button ── -->
+  <button class="ayuda-btn" aria-label="Ayuda">
+    <span class="ayuda-btn__label">Ayuda</span>
+    <span class="ayuda-btn__icon">
+      <img src="ic_ayuda_bot.svg" width="20" height="20" alt="">
+    </span>
+  </button>
+
+</div><!-- /phone -->
+
+<script>
+  const MODAL_SLIDE_MS = 520;  // modal sale → overlay queda oscuro
+  const SCAN_APPEAR_MS = 400;  // espera antes de arrancar fotogramas
+  const FRAME_MIN_MS   = 60;   // delay mínimo (últimos frames, rápidos)
+  const FRAME_MAX_MS   = 140;  // delay máximo (primeros frames, lentos)
+  const TOTAL_FRAMES   = 14;
+  const HOLD_MS        = 300;  // pausa en el último fotograma antes de navegar
+
+  let bioNavTimer   = null;
+  let bioFrameTimer = null;
+
+  // Easing cuadrático: delay decrece de FRAME_MAX_MS a FRAME_MIN_MS
+  function frameDelay(frameIndex) {
+    const t = frameIndex / (TOTAL_FRAMES - 1); // 0 → 1
+    return Math.round(FRAME_MAX_MS - (FRAME_MAX_MS - FRAME_MIN_MS) * (t * t));
+  }
+
+  // Paso 1 — “Activar Face ID”: abre el modal
+  function activarFaceID() {
+    const email = localStorage.getItem('correo') || 'tu correo';
+    document.getElementById('bioModalDesc').textContent =
+      `Iniciarás sesión en “Bold” utilizando tu llave de acceso guardada para “${email}”`;
+    document.getElementById('bioModalOverlay').classList.add('is-open');
+    if (bioNavTimer)   { clearTimeout(bioNavTimer);   bioNavTimer   = null; }
+    if (bioFrameTimer) { clearTimeout(bioFrameTimer); bioFrameTimer = null; }
+  }
+
+  // Paso 2 — “Continuar”: modal se va, overlay queda, animación arranca
+  function confirmBiometric() {
+    const overlay = document.getElementById('bioModalOverlay');
+    const img     = document.getElementById('faceidFrame');
+
+    overlay.classList.remove('is-open');
+    overlay.classList.add('is-scanning');
+
+    img.src = 'faceid_frame1.png';
+
+    if (bioFrameTimer) { clearTimeout(bioFrameTimer); bioFrameTimer = null; }
+    if (bioNavTimer)   { clearTimeout(bioNavTimer);   bioNavTimer   = null; }
+
+    setTimeout(() => {
+      let frame = 1;
+
+      function scheduleNext() {
+        bioFrameTimer = setTimeout(() => {
+          frame++;
+          img.src = `faceid_frame${frame}.png`;
+          if (frame >= TOTAL_FRAMES) {
+            bioFrameTimer = null;
+            bioNavTimer = setTimeout(() => {
+              window.location.href = '../fase-2/checkpoint-1.html';
+            }, HOLD_MS);
+          } else {
+            scheduleNext();
+          }
+        }, frameDelay(frame));
+      }
+
+      scheduleNext();
+    }, MODAL_SLIDE_MS + SCAN_APPEAR_MS);
+  }
+
+  // X — Cierra todo y cancela la navegación pendiente
+  function closeBiometricModal() {
+    if (bioNavTimer)   { clearTimeout(bioNavTimer);   bioNavTimer   = null; }
+    if (bioFrameTimer) { clearTimeout(bioFrameTimer); bioFrameTimer = null; }
+    const overlay = document.getElementById('bioModalOverlay');
+    overlay.classList.remove('is-open', 'is-scanning');
+  }
+</script>
+
+</body>
+</html>

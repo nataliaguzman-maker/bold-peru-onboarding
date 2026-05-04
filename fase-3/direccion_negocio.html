@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=393, initial-scale=1">
+  <title>Bold – Dirección del negocio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../components/shared.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #D0D3E0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 0;
+      min-height: 100vh;
+    }
+
+    /* ── Phone shell: 863px (includes keyboard space) ── */
+    .phone {
+      width: 393px;
+      height: 863px;
+      background: #F7F8FB;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ══ HEADER ══ */
+    .header {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-bottom: 16px;
+    }
+    .status-bar {
+      height: 20px; position: relative;
+      display: flex; align-items: center; padding: 0 8px;
+    }
+    .status-bar__time {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%,-50%);
+      font-family: Roboto,sans-serif; font-weight:600; font-size:12px; color:#1E1E1E; line-height:1;
+    }
+    .status-bar__right {
+      position: absolute; right: 5px; top: 50%;
+      transform: translateY(-50%);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .status-bar__carrier {
+      font-family: Roboto,sans-serif; font-weight:400; font-size:12px;
+      letter-spacing:-0.0014em; color:#1E1E1E; line-height:1;
+    }
+    .nav-bar {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 0 12px;
+    }
+    .nav-left  { width:102px; display:flex; align-items:center; }
+    .nav-center { flex:1; }
+    .nav-right  { width:102px; display:flex; justify-content:flex-end; }
+
+    /* ══ BODY ══ */
+    .body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      padding: 0 16px;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+    .body::-webkit-scrollbar { display: none; }
+
+    .text-section { display:flex; flex-direction:column; gap:8px; }
+    .subtitle {
+      font-family: Montserrat,sans-serif; font-weight:400;
+      font-size:14px; line-height:20px; color:#1E1E1E;
+    }
+
+    .form-section { display:flex; flex-direction:column; gap:32px; }
+
+    /* ── Cascade items: fade + slide in ── */
+    .cascade-item {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .cascade-item.visible { opacity:1; transform:none; }
+
+    /* ── Select button (dropdown trigger) ── */
+    .c-select-btn {
+      width: 100%;
+      height: 48px;
+      padding: 0 12px;
+      background: #FFFFFF;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .c-select-value {
+      font-family: Montserrat,sans-serif; font-weight:400;
+      font-size:14px; line-height:20px; color:#606060;
+    }
+    .c-select-value.selected { color:#1E1E1E; }
+
+    /* ── Active input border ── */
+    .c-input-field--active { border-color: #121E6C !important; }
+
+    /* ── Textarea detalles ── */
+    .c-textarea-field {
+      width: 100%;
+      min-height: 104px;
+      padding: 12px;
+      background: #FFFFFF;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      font-family: Montserrat,sans-serif; font-weight: 400;
+      font-size: 14px; line-height: 20px; color: #1E1E1E;
+      outline: none;
+      resize: none;
+      overflow-y: auto;
+      align-self: stretch;
+    }
+    .c-textarea-field::placeholder { color: #606060; }
+
+    /* ── Detalles group layout ── */
+    #grupoDetalles {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      align-self: stretch;
+    }
+
+    /* ══ FOOTER ══ */
+    .footer {
+      flex-shrink: 0; display:flex; flex-direction:column;
+      gap:20px; padding:0 16px 20px;
+    }
+    .progress-bar { display:flex; gap:8px; }
+    .progress-bar__seg {
+      flex:1; height:2px; border-radius:1px;
+      background:#D2D4E1; position:relative; overflow:hidden;
+    }
+    .progress-bar__fill {
+      position:absolute; left:0; top:0; height:100%;
+      background:#FF2947; border-radius:1px;
+    }
+    .action-bar { display:flex; justify-content:space-between; align-items:center; }
+    .btn-continuar { width:140px; }
+
+    /* ══ iOS QWERTY KEYBOARD ══ */
+    .keyboard {
+      flex-shrink: 0;
+      width: 100%;
+      height: 290px;
+      background: #D1D3D9;
+      position: relative;
+      overflow: hidden;
+      display: none;
+    }
+    .keyboard.kb-visible { display: block; }
+
+    .kb-rows {
+      position:absolute; left:3px; right:3px; top:6px;
+      display:flex; flex-direction:column; gap:13px;
+    }
+    .kb-row { display:flex; flex-direction:row; width:100%; gap:6px; }
+
+    .kb-ltr {
+      flex:1; height:46px; min-width:0;
+      background:#FFFFFF; border-radius:4.6px;
+      box-shadow:0px 1px 0px 0px rgba(0,0,0,0.30);
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; user-select:none;
+      font-family:-apple-system,'Helvetica Neue',sans-serif;
+      font-size:17px; font-weight:400; color:#000;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .kb-ltr:active { background:#ACB0BD; }
+    .kb-ltr--special {
+      flex:0 0 44px; background:#ACB0BE; box-shadow:none; font-size:13px;
+    }
+    .kb-ltr--special:active { background:#888D9A; }
+    .kb-row--mid { padding:0 22px; }
+    .kb-ltr--space  { flex:4; font-size:15px; }
+    .kb-ltr--return {
+      flex:0 0 80px; background:#ACB0BE; box-shadow:none; font-size:15px;
+    }
+    .kb-ltr--return:active { background:#888D9A; }
+    .kb-ltr--shift-on {
+      background:#FFFFFF !important;
+      box-shadow:0px 1px 0px 0px rgba(0,0,0,0.30) !important;
+    }
+    .kb-home {
+      position:absolute; bottom:8px; left:50%;
+      transform:translateX(-50%);
+      width:134px; height:5px;
+      background:#1C1C1E; border-radius:3px; opacity:0.18;
+    }
+
+    /* ══ DROPUP OVERLAY ══ */
+    .dropup-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 300;
+      display: none;
+      align-items: flex-end;
+    }
+    .dropup-overlay.is-open { display: flex; }
+
+    .dropup {
+      width: 100%;
+      background: #FFFFFF;
+      border-radius: 32px 32px 0 0;
+      box-shadow: 0px -4px 8px 0px rgba(0,0,0,0.12);
+      max-height: 72%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 12px 16px 32px;
+      transform: translateY(100%);
+      transition: transform 0.32s cubic-bezier(0.32, 0, 0, 1);
+    }
+    .dropup-overlay.is-open .dropup { transform: translateY(0); }
+
+    .dropup__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .dropup__header-spacer { width: 48px; height: 48px; }
+    .dropup__title {
+      font-family: Montserrat,sans-serif; font-weight: 700;
+      font-size: 16px; line-height: 24px; color: #121E6C;
+      text-align: center; flex: 1;
+    }
+
+    .dropup__search-wrap { flex-shrink: 0; }
+    .dropup__search-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #F7F8FB;
+      border-radius: 30px;
+      padding: 12px;
+    }
+    .dropup__search-input {
+      flex: 1; background: none; border: none;
+      font-family: Montserrat,sans-serif; font-size: 14px; color: #1E1E1E;
+      outline: none;
+    }
+    .dropup__search-input::placeholder { color: #606060; }
+
+    .dropup__list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scrollbar-width: none;
+    }
+    .dropup__list::-webkit-scrollbar { display: none; }
+
+    .dropup__option {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      align-self: stretch;
+      width: 100%;
+      height: 52px;
+      padding: 32px 12px;
+      background: #F7F8FB;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      font-family: Montserrat,sans-serif; font-weight: 500;
+      font-size: 14px; line-height: 20px; color: #121E6C;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .dropup__option:active { opacity: 0.8; }
+    .dropup__option--selected { color: #FF2947; font-weight: 600; }
+
+    /* ══ AYUDA ══ */
+    .ayuda-btn {
+      position:absolute; top:40px; right:16px;
+      display:flex; flex-direction:row;
+      align-items:center; gap:4px;
+      padding:8px 8px 8px 12px;
+      background:#FFFFFF; border:none;
+      border-radius:100px;
+      box-shadow:0px 4px 12px 0px rgba(18,30,108,0.08);
+      cursor:pointer; height:32px; z-index:10;
+    }
+    .ayuda-btn__label {
+      font-family:Montserrat,sans-serif; font-weight:500;
+      font-size:14px; line-height:20px; color:#121E6C;
+    }
+    .ayuda-btn__icon {
+      width:20px; height:20px;
+      display:flex; align-items:center; justify-content:center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="status-bar">
+      <span class="status-bar__time">1:11 PM</span>
+      <div class="status-bar__right">
+        <svg width="17" height="11" viewBox="0 0 17 11" fill="none" aria-hidden="true">
+          <rect x="0"  y="7"    width="3.1" height="4"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="4"  y="5"    width="3.1" height="6"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="8"  y="3"    width="3.1" height="8"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="12" y="0.5"  width="3.1" height="10.5" rx="0.5" fill="#1E1E1E"/>
+        </svg>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+          <circle cx="8" cy="10.5" r="1.3" fill="#1E1E1E"/>
+          <path d="M4.8 7.5C5.8 6.5 6.9 6 8 6s2.2.5 3.2 1.5"  stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          <path d="M2.2 5C3.7 3.4 5.8 2.5 8 2.5s4.3.9 5.8 2.5" stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          <path d="M0 2.5C2.1.9 4.9 0 8 0s5.9.9 8 2.5"          stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="status-bar__carrier">Carrier</span>
+      </div>
+    </div>
+    <div class="nav-bar">
+      <div class="nav-left">
+        <button class="c-btn-close"
+                onclick="window.location.href='../index.html?skip_location=true'"
+                aria-label="Cerrar">
+          <img src="../components/ic_close.svg" width="24" height="24" alt="">
+        </button>
+      </div>
+      <div class="nav-center"></div>
+      <div class="nav-right"></div>
+    </div>
+  </div>
+
+  <!-- ── BODY ── -->
+  <div class="body" id="mainBody">
+
+    <div class="text-section">
+      <h1 class="c-screen-title">¿Cuál es la dirección de tu negocio?</h1>
+      <p class="subtitle">Nos referimos al local, oficina o punto de venta físico.</p>
+    </div>
+
+    <div class="form-section">
+
+      <!-- Departamento — siempre visible -->
+      <div class="c-form-group">
+        <label class="c-input-label">Departamento</label>
+        <button class="c-select-btn" id="btnDepto" onclick="openDropup('depto')" aria-haspopup="listbox">
+          <span class="c-select-value" id="valDepto">Selecciona</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 6L8 10L12 6" stroke="#606060" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Provincia — cascada -->
+      <div class="c-form-group cascade-item" id="grupoProv" style="display:none">
+        <label class="c-input-label">Provincia</label>
+        <button class="c-select-btn" id="btnProv" onclick="openDropup('prov')" aria-haspopup="listbox">
+          <span class="c-select-value" id="valProv">Selecciona</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 6L8 10L12 6" stroke="#606060" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Distrito — cascada -->
+      <div class="c-form-group cascade-item" id="grupoDist" style="display:none">
+        <label class="c-input-label">Distrito</label>
+        <button class="c-select-btn" id="btnDist" onclick="openDropup('dist')" aria-haspopup="listbox">
+          <span class="c-select-value" id="valDist">Selecciona</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 6L8 10L12 6" stroke="#606060" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Dirección — cascada -->
+      <div class="c-form-group cascade-item" id="grupoDireccion" style="display:none">
+        <label class="c-input-label" for="inputDireccion">Dirección</label>
+        <input class="c-input-field" type="text" id="inputDireccion"
+               inputmode="none" readonly
+               autocapitalize="sentences"
+               placeholder="Escribe tu dirección"
+               onclick="setAddressActive(this)">
+      </div>
+
+      <!-- Detalles — cascada -->
+      <div class="cascade-item" id="grupoDetalles" style="display:none">
+        <label class="c-input-label" for="inputDetalles">Detalles de la dirección (opcional)</label>
+        <textarea class="c-textarea-field" id="inputDetalles"
+                  inputmode="none" readonly
+                  autocapitalize="sentences"
+                  placeholder="Ej: Manzana 1, torre 2, apartamento 502, al lado del Colegio Peruano Británico"
+                  onclick="setAddressActive(this)"></textarea>
+      </div>
+
+    </div>
+  </div><!-- /body -->
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="progress-bar" role="progressbar" aria-label="Paso 3 de 4, pantalla 5 de 8">
+      <div class="progress-bar__seg">
+        <div class="progress-bar__fill" style="width:100%"></div>
+      </div>
+      <div class="progress-bar__seg">
+        <div class="progress-bar__fill" style="width:100%"></div>
+      </div>
+      <div class="progress-bar__seg">
+        <div class="progress-bar__fill" style="width:62.5%"></div>
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="c-btn-text c-btn-text--active"
+              onclick="window.location.href='correo_numero.html'">Atrás</button>
+      <button class="c-btn-primary btn-continuar" id="btnContinuar"
+              disabled onclick="goNext()">Continuar</button>
+    </div>
+  </div>
+
+  <!-- ── iOS QWERTY KEYBOARD (para dirección / detalles) ── -->
+  <div class="keyboard" id="kbLetras" aria-hidden="true">
+    <div class="kb-rows">
+      <div class="kb-row">
+        <div class="kb-ltr" onclick="typeKey('q')">q</div><div class="kb-ltr" onclick="typeKey('w')">w</div>
+        <div class="kb-ltr" onclick="typeKey('e')">e</div><div class="kb-ltr" onclick="typeKey('r')">r</div>
+        <div class="kb-ltr" onclick="typeKey('t')">t</div><div class="kb-ltr" onclick="typeKey('y')">y</div>
+        <div class="kb-ltr" onclick="typeKey('u')">u</div><div class="kb-ltr" onclick="typeKey('i')">i</div>
+        <div class="kb-ltr" onclick="typeKey('o')">o</div><div class="kb-ltr" onclick="typeKey('p')">p</div>
+      </div>
+      <div class="kb-row kb-row--mid">
+        <div class="kb-ltr" onclick="typeKey('a')">a</div><div class="kb-ltr" onclick="typeKey('s')">s</div>
+        <div class="kb-ltr" onclick="typeKey('d')">d</div><div class="kb-ltr" onclick="typeKey('f')">f</div>
+        <div class="kb-ltr" onclick="typeKey('g')">g</div><div class="kb-ltr" onclick="typeKey('h')">h</div>
+        <div class="kb-ltr" onclick="typeKey('j')">j</div><div class="kb-ltr" onclick="typeKey('k')">k</div>
+        <div class="kb-ltr" onclick="typeKey('l')">l</div>
+      </div>
+      <div class="kb-row">
+        <div class="kb-ltr kb-ltr--special" id="kbShift" onclick="toggleShift()">⇧</div>
+        <div class="kb-ltr" onclick="typeKey('z')">z</div><div class="kb-ltr" onclick="typeKey('x')">x</div>
+        <div class="kb-ltr" onclick="typeKey('c')">c</div><div class="kb-ltr" onclick="typeKey('v')">v</div>
+        <div class="kb-ltr" onclick="typeKey('b')">b</div><div class="kb-ltr" onclick="typeKey('n')">n</div>
+        <div class="kb-ltr" onclick="typeKey('m')">m</div>
+        <div class="kb-ltr kb-ltr--special" onclick="deleteKey()">
+          <svg width="20" height="15" viewBox="0 0 24 18" fill="none">
+            <path d="M9.5 1H21C22.1 1 23 1.9 23 3V15C23 16.1 22.1 17 21 17H9.5C8.9 17 8.3 16.7 7.9 16.2L1.5 9L7.9 1.8C8.3 1.3 8.9 1 9.5 1Z" fill="none" stroke="#3C3C43" stroke-width="1.2" stroke-opacity="0.6"/>
+            <path d="M15 6L11 12M11 6L15 12" stroke="#3C3C43" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kb-row">
+        <div class="kb-ltr kb-ltr--special" onclick="typeKey('1')">1</div>
+        <div class="kb-ltr kb-ltr--special" onclick="typeKey('2')">2</div>
+        <div class="kb-ltr kb-ltr--space" onclick="typeKey(' ')">espacio</div>
+        <div class="kb-ltr kb-ltr--special" onclick="typeKey('.')">.</div>
+        <div class="kb-ltr kb-ltr--return">return</div>
+      </div>
+    </div>
+    <div class="kb-home"></div>
+  </div>
+
+  <!-- ── DROPUP ── -->
+  <div class="dropup-overlay" id="dropupOverlay" onclick="handleOverlayClick(event)">
+    <div class="dropup" id="dropupSheet" onclick="event.stopPropagation()">
+      <div class="dropup__header">
+        <div class="dropup__header-spacer"></div>
+        <h2 class="dropup__title" id="dropupTitle">Selecciona el departamento</h2>
+        <button class="c-btn-close" onclick="closeDropupPanel()" aria-label="Cerrar">
+          <img src="../components/ic_close.svg" width="24" height="24" alt="">
+        </button>
+      </div>
+      <div class="dropup__search-wrap">
+        <div class="dropup__search-bar">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6.5" stroke="#606060" stroke-width="1.5"/>
+            <path d="M16 16L20 20" stroke="#606060" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input type="text" id="dropupSearch" class="dropup__search-input"
+                 placeholder="Buscar..." oninput="filterDropup(this.value)">
+        </div>
+      </div>
+      <div class="dropup__list" id="dropupList" role="listbox"></div>
+    </div>
+  </div>
+
+  <!-- ── AYUDA ── -->
+  <button class="ayuda-btn" aria-label="Ayuda">
+    <span class="ayuda-btn__label">Ayuda</span>
+    <span class="ayuda-btn__icon">
+      <img src="../fase-1/ic_ayuda_bot.svg" width="20" height="20" alt="">
+    </span>
+  </button>
+
+</div><!-- /phone -->
+
+<script>
+/* ═══════════════════════════════════════════
+   DATOS GEOGRÁFICOS DE PERÚ
+   ═══════════════════════════════════════════ */
+const PERU = {
+  'Amazonas': {
+    'Chachapoyas': ['Chachapoyas','Asunción','Balsas','Cheto','Levanto','Molinopampa','Quinjalca','Soloco','Sonche'],
+    'Bagua': ['Bagua','Aramango','Copallin','El Parco','Imaza','La Peca'],
+    'Bongará': ['Jumbilla','Churuja','Corosha','Florida','Jazan','Yambrasbamba'],
+    'Condorcanqui': ['Nieva','El Cenepa','Río Santiago'],
+    'Luya': ['Lamud','Camporredondo','Colcamar','Luya','María','Ocalli','Tingo'],
+    'Rodríguez de Mendoza': ['San Nicolás','Chirimoto','Cochamal','Huambo','Omia','Santa Rosa'],
+    'Utcubamba': ['Bagua Grande','Cajaruro','Cumba','El Milagro','Jamalca','Lonya Grande','Yamón']
+  },
+  'Áncash': {
+    'Huaraz': ['Huaraz','Cochabamba','Huanchay','Independencia','Jangas','Olleros','Taricá'],
+    'Santa': ['Chimbote','Coishco','Macate','Moro','Nepeña','Samanco','Santa','Vinzos'],
+    'Carhuaz': ['Carhuaz','Acopampa','Anta','Marcara','Shilla','Tinco','Yungar'],
+    'Casma': ['Casma','Buena Vista Alta','Comandante Noel','Yaután'],
+    'Huaylas': ['Caraz','Huallanca','Huata','Pamparomas','Pueblo Libre','Santo Toribio','Yuracmarca'],
+    'Yungay': ['Yungay','Cascapara','Mancos','Quillo','Ranrahirca','Shupluy','Yanama']
+  },
+  'Apurímac': {
+    'Abancay': ['Abancay','Chacoche','Circa','Curahuasi','Huanipaca','Lambrama','Pichirhua','Tamburco'],
+    'Andahuaylas': ['Andahuaylas','Andarapa','Huancarama','Huancaray','Kishuara','Pacobamba','San Jerónimo','Talavera'],
+    'Cotabambas': ['Tambobamba','Cotabambas','Coyllurqui','Haquira','Mara','Challhuahuacho'],
+    'Chincheros': ['Chincheros','Anco-Huallo','Cocharcas','Huaccana','Ocobamba','Ongoy'],
+    'Grau': ['Chuquibambilla','Curpahuasi','Mamara','Pataypampa','Santa Rosa','Vilcabamba']
+  },
+  'Arequipa': {
+    'Arequipa': ['Arequipa','Alto Selva Alegre','Cayma','Cerro Colorado','Characato','Hunter','José Luis Bustamante y Rivero','La Joya','Mariano Melgar','Miraflores','Paucarpata','Sachaca','Socabaya','Tiabaya','Uchumayo','Yanahuara','Yura'],
+    'Camaná': ['Camaná','José María Quimper','Mariscal Cáceres','Nicolás de Piérola','Ocoña','Quilca','Samuel Pastor'],
+    'Caylloma': ['Chivay','Achoma','Cabanaconde','Callalli','Caylloma','Coporaque','Huanca','Ichupampa','Lari','Maca','Yanque'],
+    'Islay': ['Mollendo','Cocachacra','Dean Valdivia','Islay','Mejía','Punta de Bombón']
+  },
+  'Ayacucho': {
+    'Huamanga': ['Ayacucho','Acocro','Carmen Alto','Chiara','Jesús Nazareno','Ocros','Pacaycasa','Quinua','San Juan Bautista','Tambillo','Vinchos'],
+    'Huanta': ['Huanta','Ayahuanco','Huamanguilla','Iguaín','Luricocha','Santillana','Sivia'],
+    'La Mar': ['San Miguel','Anco','Ayna','Chilcas','Chungui','Santa Rosa','Tambo'],
+    'Lucanas': ['Puquio','Aucara','Cabana','Chipao','Laramate','Lucanas','Otoca','Saisa','San Cristóbal','San Juan','Santa Lucía']
+  },
+  'Cajamarca': {
+    'Cajamarca': ['Cajamarca','Asunción','Chetilla','Cospan','Encañada','Jesús','Llacanora','Los Baños del Inca','Magdalena','Namora','San Juan'],
+    'Jaén': ['Jaén','Bellavista','Chontali','Colasay','Huabal','Las Pirias','Pomahuaca','Pucará','Santa Rosa'],
+    'San Ignacio': ['San Ignacio','Chirinos','Huarango','La Coipa','Namballe','San José de Lourdes','Tabaconas'],
+    'Chota': ['Chota','Anguia','Chadín','Chiguirip','Cochabamba','Huambos','Lajas','Llama','Tacabamba'],
+    'Cutervo': ['Cutervo','Callayuc','La Ramada','Pimpingos','Querocotillo','Santa Cruz','Santo Tomás','Socota']
+  },
+  'Callao': {
+    'Callao': ['Callao','Bellavista','Carmen de La Legua Reynoso','La Perla','La Punta','Mi Perú','Ventanilla']
+  },
+  'Cusco': {
+    'Cusco': ['Cusco','Ccorca','Poroy','San Jerónimo','San Sebastián','Santiago','Saylla','Wanchaq'],
+    'Urubamba': ['Urubamba','Chinchero','Huayllabamba','Machupicchu','Maras','Ollantaytambo','Yucay'],
+    'La Convención': ['Santa Ana','Echarate','Huayopata','Kimbiri','Maranura','Ocobamba','Quellouno','Santa Teresa','Vilcabamba'],
+    'Calca': ['Calca','Coya','Lamay','Lares','Pisac','San Salvador','Taray','Yanatile'],
+    'Canchis': ['Sicuani','Checacupe','Combapata','Marangani','Pitumarca','San Pablo','San Pedro','Tinta']
+  },
+  'Huancavelica': {
+    'Huancavelica': ['Huancavelica','Acobambilla','Acoria','Conayca','Cuenca','Huayllahuara','Izcuchaca','Moya','Nuevo Occoro','Palca','Vilca','Yauli'],
+    'Acobamba': ['Acobamba','Andabamba','Anta','Caja','Marcas','Paucara','Pomacocha','Rosario'],
+    'Tayacaja': ['Pampas','Acostambo','Acraquia','Ahuaycha','Colcabamba','Daniel Hernández','Huaribamba','Pazos','Salcabamba','Surcubamba']
+  },
+  'Huánuco': {
+    'Huánuco': ['Huánuco','Amarilis','Chinchao','Churubamba','Margos','Pillco Marca','Quisqui','Santa María del Valle','Yarumayo'],
+    'Leoncio Prado': ['Rupa-Rupa','Daniel Alomía Robles','Hermilio Valdizán','José Crespo y Castillo','Luyando','Mariano Dámaso Beraún'],
+    'Ambo': ['Ambo','Cayna','Colpas','Conchamarca','Huácar','San Francisco','San Rafael'],
+    'Dos de Mayo': ['La Unión','Chuquis','Marías','Pachas','Ripán','Sillapata','Yanas']
+  },
+  'Ica': {
+    'Ica': ['Ica','La Tinguiña','Los Aquijes','Ocucaje','Parcona','Pueblo Nuevo','Salas','San Juan Bautista','Santiago','Subtanjalla','Tate'],
+    'Chincha': ['Chincha Alta','Alto Larán','Chincha Baja','El Carmen','Grocio Prado','Pueblo Nuevo','Sunampe','Tambo de Mora'],
+    'Pisco': ['Pisco','Huancano','Humay','Independencia','Paracas','San Andrés','San Clemente','Tupac Amaru Inca'],
+    'Nasca': ['Nasca','Changuillo','El Ingenio','Marcona','Vista Alegre'],
+    'Palpa': ['Palpa','Llipata','Río Grande','Santa Cruz','Tibillo']
+  },
+  'Junín': {
+    'Huancayo': ['Huancayo','Carhuacallanga','Chilca','Chongos Alto','El Tambo','Hualhuas','Huancan','Ingenio','Pariahuanca','Pucara','Quichuay','Quilcas','San Agustín','Saño','Sapallanga','Sicaya','Viques'],
+    'Chanchamayo': ['La Merced','Campamento','San Luis de Shuaro','San Ramón','Pichanaqui','Vitoc'],
+    'Satipo': ['Satipo','Coviriali','Llaylla','Mazamari','Pampa Hermosa','Pangoa','Río Negro','Río Tambo'],
+    'Tarma': ['Tarma','Acobamba','Huaricolca','Huasahuasi','La Unión','Palca','Palcamayo','San Pedro de Cajas']
+  },
+  'La Libertad': {
+    'Trujillo': ['Trujillo','El Porvenir','Florencia de Mora','Huanchaco','La Esperanza','Laredo','Moche','Salaverry','Simbal','Victor Larco Herrera'],
+    'Ascope': ['Ascope','Chicama','Chocope','Casa Grande','Magdalena de Cao','Paijan','Rázuri','Santiago de Cao'],
+    'Sánchez Carrión': ['Huamachuco','Chugay','Cochorco','Curgos','Marcabal','Sanagoran','Sarin','Sartimbamba'],
+    'Pacasmayo': ['San Pedro de Lloc','Guadalupe','Jequetepeque','Pacasmayo','San José'],
+    'Virú': ['Virú','Chao','Guadalupito']
+  },
+  'Lambayeque': {
+    'Chiclayo': ['Chiclayo','Chongoyape','Eten','José Leonardo Ortiz','La Victoria','Lagunas','Monsefú','Pimentel','Reque','Santa Rosa','Saña','Tumán'],
+    'Ferreñafe': ['Ferreñafe','Cañaris','Incahuasi','Pitipo','Pueblo Nuevo'],
+    'Lambayeque': ['Lambayeque','Chóchope','Illimo','Jayanca','Mochumí','Mórrope','Motupe','Olmos','Pacora','Salas','San José','Túcume']
+  },
+  'Lima': {
+    'Lima': ['Ancón','Ate','Barranco','Breña','Carabayllo','Chaclacayo','Chorrillos','Cieneguilla','Comas','El Agustino','Independencia','Jesús María','La Molina','La Victoria','Lima','Lince','Los Olivos','Lurigancho','Lurín','Magdalena del Mar','Miraflores','Pachacámac','Pueblo Libre','Puente Piedra','Rímac','San Borja','San Isidro','San Juan de Lurigancho','San Juan de Miraflores','San Luis','San Martín de Porres','San Miguel','Santa Anita','Santiago de Surco','Surquillo','Villa El Salvador','Villa María del Triunfo'],
+    'Barranca': ['Barranca','Ámbar','Iloca','Miras','Puerto Supe','Supe'],
+    'Cañete': ['San Vicente de Cañete','Asia','Cerro Azul','Chilca','Imperial','Lunahuaná','Mala','Nuevo Imperial','San Antonio','Santa Cruz de Flores'],
+    'Huaral': ['Huaral','Atavillos Alto','Atavillos Bajo','Aucallama','Chancay','Ihuarí','Lampián','Pacaraos'],
+    'Huarochirí': ['Matucana','Antioquía','Callahuanca','Carampoma','Chicla','Huarochirí','Ricardo Palma','San Damián','San Mateo','Santa Eulalia','Santo Domingo de Los Olleros','Surco']
+  },
+  'Loreto': {
+    'Maynas': ['Iquitos','Alto Nanay','Fernando Lores','Indiana','Las Amazonas','Mazan','Napo','Punchana','Belén','San Juan Bautista'],
+    'Alto Amazonas': ['Yurimaguas','Balsapuerto','Jeberos','Lagunas','Santa Cruz','Teniente César López Rojas'],
+    'Requena': ['Requena','Alto Tapiche','Capelo','Emilio San Martín','Maquia','Puinahua','Saquena','Soplin','Tapiche'],
+    'Ucayali': ['Contamana','Inahuaya','Padre Márquez','Pampa Hermosa','Sarayacu','Vargas Guerra']
+  },
+  'Madre de Dios': {
+    'Tambopata': ['Tambopata','Inambari','Las Piedras','Laberinto'],
+    'Manu': ['Manu','Fitzcarrald','Madre de Dios','Huepetuhe'],
+    'Tahuamanu': ['Iñapari','Iberia','Tahuamanu']
+  },
+  'Moquegua': {
+    'Mariscal Nieto': ['Moquegua','Carumas','Cuchumbaya','Samegua','San Cristóbal','Torata'],
+    'General Sánchez Cerro': ['Omate','Chojata','Coalaque','Ichuña','La Capilla','Lloque','Matalaque','Puquina','Ubinas'],
+    'Ilo': ['Ilo','El Algarrobal','Pacocha']
+  },
+  'Pasco': {
+    'Pasco': ['Chaupimarca','Huachón','Huariaca','Huayllay','Ninacaca','Pallanchacra','Paucartambo','Simón Bolívar','Ticlacayán','Tinyahuarco','Vicco','Yanacancha'],
+    'Daniel Alcides Carrión': ['Yanahuanca','Chacayán','Goyllarisquizga','Paucar','Santa Ana de Tusi','Tapuc','Vilcabamba'],
+    'Oxapampa': ['Oxapampa','Chontabamba','Huancabamba','Palcazú','Pozuzo','Puerto Bermúdez','Villa Rica','Constitución']
+  },
+  'Piura': {
+    'Piura': ['Piura','Castilla','Catacaos','Cura Morí','La Arena','La Unión','Las Lomas','Tambo Grande','Veintiseis de Octubre'],
+    'Sullana': ['Sullana','Bellavista','Ignacio Escudero','Lancones','Marcavelica','Miguel Checa','Querecotillo','Salitral'],
+    'Talara': ['Pariñas','El Alto','La Brea','Lobitos','Los Órganos','Máncora'],
+    'Huancabamba': ['Huancabamba','Canchaque','El Carmen de la Frontera','Huarmaca','Sondor','Sondorillo'],
+    'Morropón': ['Chulucanas','Buenos Aires','Chalaco','La Matanza','Morropón','Santo Domingo','Yamango'],
+    'Ayabaca': ['Ayabaca','Frias','Jilili','Lagunas','Montero','Pacaipampa','Sapillica','Suyo']
+  },
+  'Puno': {
+    'Puno': ['Puno','Acora','Amantani','Atuncolla','Capachica','Chucuito','Coata','Huata','Mañazo','Paucarcolla','Platería','San Antonio','Tiquillaca','Vilque'],
+    'San Román': ['Juliaca','Cabana','Cabanillas','Caracoto','San Miguel'],
+    'Melgar': ['Ayaviri','Antauta','Cupi','Llalli','Macari','Nuñoa','Orurillo','Santa Rosa','Umachiri'],
+    'Chucuito': ['Juli','Desaguadero','Huacullani','Kelluyo','Pisacoma','Pomata','Zepita'],
+    'El Collao': ['Ilave','Capazo','Pilcuyo','Santa Rosa','Conduriri'],
+    'Azángaro': ['Azángaro','Achaya','Arapa','Asillo','Caminaca','Chupa','Muñani','Potoni','Saman','San Antón','San José','Tirapata']
+  },
+  'San Martín': {
+    'Moyobamba': ['Moyobamba','Calzada','Habana','Jepelacio','Soritor','Yantalo'],
+    'San Martín': ['Tarapoto','Alberto Leveau','Cacatachi','Chazuta','El Porvenir','Juan Guerra','La Banda de Shilcayo','Morales','San Antonio','Sauce','Shapaja'],
+    'Rioja': ['Rioja','Awajún','Elías Soplin Vargas','Nueva Cajamarca','Pardo Miguel','San Fernando','Yuracyacu'],
+    'Tocache': ['Tocache','Nuevo Progreso','Pólvora','Shunté','Uchiza']
+  },
+  'Tacna': {
+    'Tacna': ['Tacna','Alto de la Alianza','Calana','Ciudad Nueva','Inclán','Palca','Pocollay','Sama','Coronel Gregorio Albarracín Lanchipa','La Yarada Los Palos'],
+    'Candarave': ['Candarave','Cairani','Camilaca','Curibaya','Huanuara','Quilahuani'],
+    'Jorge Basadre': ['Locumba','Ilabaya','Ite'],
+    'Tarata': ['Tarata','Estique','Sitajara','Susapaya','Tarucachi','Ticaco']
+  },
+  'Tumbes': {
+    'Tumbes': ['Tumbes','Corrales','La Cruz','Pampas de Hospital','San Jacinto','San Juan de la Virgen'],
+    'Contralmirante Villar': ['Zorritos','Casitas','Canoas de Punta Sal'],
+    'Zarumilla': ['Zarumilla','Aguas Verdes','Matapalo','Papayal']
+  },
+  'Ucayali': {
+    'Coronel Portillo': ['Callería','Campoverde','Iparia','Masisea','Yarinacocha','Nueva Requena','Manantay'],
+    'Atalaya': ['Raimondi','Sepahua','Tahuania','Yurúa'],
+    'Padre Abad': ['Padre Abad','Irazola','Curimaná','Neshuya','Alexander Von Humboldt'],
+    'Purús': ['Purús']
+  }
+};
+
+/* ═══════════════════════════════════════════
+   ESTADO
+   ═══════════════════════════════════════════ */
+let selectedDepto = '';
+let selectedProv  = '';
+let selectedDist  = '';
+let activeDropup  = null;
+let activeInput   = null;
+let shiftActive   = false;
+
+/* ═══════════════════════════════════════════
+   CASCADA
+   ═══════════════════════════════════════════ */
+function revealField(id) {
+  const el = document.getElementById(id);
+  el.style.display = '';
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('visible')));
+}
+
+function hideField(id) {
+  const el = document.getElementById(id);
+  el.classList.remove('visible');
+  el.style.display = 'none';
+}
+
+/* ═══════════════════════════════════════════
+   DROPUP
+   ═══════════════════════════════════════════ */
+const TITLES = { depto: 'Selecciona el departamento', prov: 'Selecciona la provincia', dist: 'Selecciona el distrito' };
+
+function openDropup(type) {
+  activeDropup = type;
+  document.getElementById('dropupTitle').textContent = TITLES[type];
+  document.getElementById('dropupSearch').value = '';
+  renderDropupList('');
+  document.getElementById('dropupOverlay').classList.add('is-open');
+  setTimeout(() => document.getElementById('dropupSearch').focus(), 350);
+}
+
+function getDropupItems() {
+  if (activeDropup === 'depto') return Object.keys(PERU).sort();
+  if (activeDropup === 'prov')  return Object.keys(PERU[selectedDepto] || {}).sort();
+  if (activeDropup === 'dist')  return (PERU[selectedDepto]?.[selectedProv] || []).slice().sort();
+  return [];
+}
+
+function getCurrentSelection() {
+  if (activeDropup === 'depto') return selectedDepto;
+  if (activeDropup === 'prov')  return selectedProv;
+  if (activeDropup === 'dist')  return selectedDist;
+  return '';
+}
+
+function renderDropupList(query) {
+  const list  = document.getElementById('dropupList');
+  const items = getDropupItems();
+  const q     = query.toLowerCase().trim();
+  const filtered = q ? items.filter(i => i.toLowerCase().includes(q)) : items;
+  const current  = getCurrentSelection();
+
+  list.innerHTML = filtered.map(item => {
+    const selected = item === current ? ' dropup__option--selected' : '';
+    return `<button class="dropup__option${selected}" onclick="selectOption('${item.replace(/'/g,"\\'")}')">
+      ${item}
+    </button>`;
+  }).join('');
+}
+
+function filterDropup(query) {
+  renderDropupList(query);
+}
+
+function selectOption(value) {
+  if (activeDropup === 'depto') {
+    const changed = value !== selectedDepto;
+    selectedDepto = value;
+    document.getElementById('valDepto').textContent = value;
+    document.getElementById('valDepto').classList.add('selected');
+    if (changed) {
+      selectedProv = '';
+      selectedDist = '';
+      document.getElementById('valProv').textContent = 'Selecciona';
+      document.getElementById('valProv').classList.remove('selected');
+      document.getElementById('valDist').textContent = 'Selecciona';
+      document.getElementById('valDist').classList.remove('selected');
+      hideField('grupoDist');
+      hideField('grupoDireccion');
+      hideField('grupoDetalles');
+      hideKeyboard();
+    }
+    revealField('grupoProv');
+  } else if (activeDropup === 'prov') {
+    const changed = value !== selectedProv;
+    selectedProv = value;
+    document.getElementById('valProv').textContent = value;
+    document.getElementById('valProv').classList.add('selected');
+    if (changed) {
+      selectedDist = '';
+      document.getElementById('valDist').textContent = 'Selecciona';
+      document.getElementById('valDist').classList.remove('selected');
+      hideField('grupoDireccion');
+      hideField('grupoDetalles');
+      hideKeyboard();
+    }
+    revealField('grupoDist');
+  } else if (activeDropup === 'dist') {
+    selectedDist = value;
+    document.getElementById('valDist').textContent = value;
+    document.getElementById('valDist').classList.add('selected');
+    revealField('grupoDireccion');
+    revealField('grupoDetalles');
+    setTimeout(() => {
+      setAddressActive(document.getElementById('inputDireccion'));
+      document.getElementById('mainBody').scrollTop = 9999;
+    }, 300);
+  }
+  closeDropupPanel();
+  checkForm();
+}
+
+function closeDropupPanel() {
+  document.getElementById('dropupOverlay').classList.remove('is-open');
+  activeDropup = null;
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('dropupOverlay')) closeDropupPanel();
+}
+
+/* ═══════════════════════════════════════════
+   VALIDACIÓN
+   ═══════════════════════════════════════════ */
+function checkForm() {
+  const ok = selectedDepto && selectedProv && selectedDist &&
+             document.getElementById('inputDireccion').value.trim().length > 0;
+  document.getElementById('btnContinuar').disabled = !ok;
+}
+
+/* ═══════════════════════════════════════════
+   TECLADO VIRTUAL (dirección / detalles)
+   ═══════════════════════════════════════════ */
+function showKeyboard() {
+  document.getElementById('kbLetras').classList.add('kb-visible');
+}
+function hideKeyboard() {
+  document.getElementById('kbLetras').classList.remove('kb-visible');
+}
+
+function setShift(on) {
+  shiftActive = on;
+  document.getElementById('kbShift').classList.toggle('kb-ltr--shift-on', on);
+}
+function toggleShift() { setShift(!shiftActive); }
+
+function setAddressActive(el) {
+  document.querySelectorAll('.c-input-field').forEach(i => i.classList.remove('c-input-field--active'));
+  el.classList.add('c-input-field--active');
+  activeInput = el;
+  setShift(el.value.length === 0);
+  showKeyboard();
+}
+
+function typeKey(char) {
+  if (!activeInput) return;
+  if (char === ' ') {
+    activeInput.value += ' ';
+  } else if (activeInput.value.length === 0 || shiftActive) {
+    activeInput.value += char.toUpperCase();
+    setShift(false);
+  } else {
+    activeInput.value += char.toLowerCase();
+  }
+  checkForm();
+}
+
+function deleteKey() {
+  if (!activeInput) return;
+  activeInput.value = activeInput.value.slice(0, -1);
+  if (activeInput.value.length === 0) setShift(true);
+  checkForm();
+}
+
+/* ═══════════════════════════════════════════
+   PERSISTENCIA Y NAVEGACIÓN
+   ═══════════════════════════════════════════ */
+function goNext() {
+  localStorage.setItem('departamento_negocio',      selectedDepto);
+  localStorage.setItem('provincia_negocio',         selectedProv);
+  localStorage.setItem('distrito_negocio',          selectedDist);
+  localStorage.setItem('direccion_negocio',         document.getElementById('inputDireccion').value.trim());
+  localStorage.setItem('detalles_direccion_negocio', document.getElementById('inputDetalles').value.trim());
+  window.location.href = 'ingresos_esperados.html';
+}
+</script>
+
+</body>
+</html>

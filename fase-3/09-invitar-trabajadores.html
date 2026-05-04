@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=393, initial-scale=1">
+  <title>Bold – Invitar trabajadores</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../components/shared.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #D0D3E0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 0;
+      min-height: 100vh;
+    }
+
+    .phone {
+      width: 393px;
+      height: 852px;
+      background: #F7F8FB;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ══ HEADER ══ */
+    .header {
+      flex-shrink: 0;
+      display: flex; flex-direction: column;
+      gap: 20px; padding-bottom: 16px;
+    }
+    .status-bar {
+      height: 20px; position: relative;
+      display: flex; align-items: center; padding: 0 8px;
+    }
+    .status-bar__time {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      font-family: Roboto, sans-serif; font-weight: 600; font-size: 12px; color: #1E1E1E; line-height: 1;
+    }
+    .status-bar__right {
+      position: absolute; right: 5px; top: 50%;
+      transform: translateY(-50%);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .status-bar__carrier {
+      font-family: Roboto, sans-serif; font-weight: 400; font-size: 12px;
+      letter-spacing: -0.0014em; color: #1E1E1E; line-height: 1;
+    }
+    .nav-bar {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 0 12px;
+    }
+    .nav-left  { width: 102px; display: flex; align-items: center; }
+    .nav-center { flex: 1; }
+    .nav-right  { width: 102px; display: flex; justify-content: flex-end; }
+
+    /* ══ TEXT SECTION ══ */
+    .text-section {
+      flex-shrink: 0;
+      display: flex; flex-direction: column;
+      gap: 8px;
+      padding: 0 16px 8px;
+      border-bottom: 1px solid #F1F2F6;
+    }
+    .subtitle {
+      font-family: Montserrat, sans-serif;
+      font-weight: 400; font-size: 14px; line-height: 20px;
+      color: #1E1E1E;
+    }
+    .btn-agregar {
+      display: flex; align-items: center;
+      gap: 8px; padding: 12px 0;
+      background: none; border: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-agregar__label {
+      font-family: Montserrat, sans-serif;
+      font-weight: 700; font-size: 12px; line-height: 16px;
+      color: #121E6C;
+      text-decoration: underline; text-underline-offset: 2px;
+    }
+
+    /* ══ BODY ══ */
+    .body {
+      flex: 1;
+      display: flex; flex-direction: column;
+      padding: 16px 16px 0;
+      overflow-y: auto; scrollbar-width: none;
+    }
+    .body::-webkit-scrollbar { display: none; }
+
+    .settings-section {
+      display: flex; flex-direction: column;
+      gap: 12px;
+    }
+    .section-label {
+      font-family: Montserrat, sans-serif;
+      font-weight: 400; font-size: 12px; line-height: 16px;
+      color: #606060;
+    }
+
+    /* ── Owner card ── */
+    .owner-card {
+      background: #F1F2F6;
+      border-radius: 16px;
+      padding: 0 12px;
+    }
+    .owner-card__row {
+      display: flex; align-items: center;
+      gap: 12px; padding: 12px 0;
+    }
+    .owner-card__email {
+      flex: 1;
+      font-family: Montserrat, sans-serif;
+      font-weight: 400; font-size: 14px; line-height: 20px;
+      color: #1E1E1E;
+      min-width: 0;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+
+    /* ══ FOOTER ══ */
+    .footer {
+      flex-shrink: 0;
+      display: flex; flex-direction: column;
+      gap: 20px; padding: 0 16px 20px;
+    }
+    .progress-bar { display: flex; gap: 8px; }
+    .progress-bar__seg {
+      flex: 1; height: 2px; border-radius: 1px;
+      background: #D2D4E1; position: relative; overflow: hidden;
+    }
+    .progress-bar__fill {
+      position: absolute; left: 0; top: 0; height: 100%;
+      background: #FF2947; border-radius: 1px;
+    }
+    .action-bar { display: flex; justify-content: space-between; align-items: center; }
+    .btn-continuar { width: 140px; }
+
+    /* ── Workers section ── */
+    .workers-section {
+      display: flex; flex-direction: column;
+      gap: 12px; margin-top: 24px;
+    }
+    .worker-card {
+      background: #F1F2F6;
+      border-radius: 16px;
+      padding: 0 12px;
+    }
+    .worker-card__row {
+      display: flex; align-items: center;
+      gap: 12px; padding: 12px 0;
+    }
+    .worker-card__email {
+      flex: 1;
+      font-family: Montserrat, sans-serif;
+      font-weight: 400; font-size: 14px; line-height: 20px;
+      color: #1E1E1E;
+      min-width: 0;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .worker-card__divider {
+      height: 1px; background: #E5E6EF;
+      margin-left: 32px;
+    }
+    .worker-card__lock {
+      flex-shrink: 0; width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .worker-card__edit {
+      flex-shrink: 0;
+      font-family: Montserrat, sans-serif;
+      font-weight: 400; font-size: 14px; line-height: 20px;
+      color: #BABDD3;
+    }
+
+    /* ══ MODAL CONTAINER (overlay + panel + keyboard) ══ */
+    .modal-container {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(30, 30, 30, 0.7);
+      flex-direction: column;
+      justify-content: flex-end;
+      z-index: 20;
+    }
+    .modal-container--visible { display: flex; }
+
+    /* ══ MODAL PANEL ══ */
+    .modal {
+      background: #FFFFFF;
+      border-radius: 32px 32px 0 0;
+      box-shadow: 0px -4px 8px 0px rgba(0, 0, 0, 0.12);
+      display: flex; flex-direction: column;
+      gap: 16px;
+      padding: 24px 16px 20px;
+      width: 100%;
+    }
+
+    /* ══ EMAIL KEYBOARD ══ */
+    .kb-email {
+      flex-shrink: 0;
+      width: 100%; height: 208px;
+      background: #D1D3D9;
+      position: relative; overflow: hidden;
+    }
+    .kb-email-rows {
+      position: absolute;
+      left: 3px; right: 3px; top: 6px;
+      display: flex; flex-direction: column;
+      gap: 6px;
+    }
+    .kb-email-row { display: flex; gap: 6px; }
+    .kb-email-row--mid { padding: 0 22px; }
+    .kb-ltr {
+      flex: 1; height: 42px; min-width: 0;
+      background: #FFFFFF; border-radius: 4.6px;
+      box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.30);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; user-select: none;
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+      font-size: 17px; font-weight: 400; color: #000;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .kb-ltr:active { background: #ACB0BD; }
+    .kb-ltr--special {
+      flex: 0 0 44px;
+      background: #ACB0BE; box-shadow: none; font-size: 13px;
+    }
+    .kb-ltr--special:active { background: #888D9A; }
+    .kb-ltr--sm   { flex: 0 0 40px; }
+    .kb-ltr--space { flex: 3; font-size: 15px; }
+    .kb-ltr--return {
+      flex: 0 0 70px;
+      background: #ACB0BE; box-shadow: none; font-size: 14px;
+    }
+    .kb-ltr--return:active { background: #888D9A; }
+    .kb-home {
+      position: absolute; bottom: 4px; left: 50%;
+      transform: translateX(-50%);
+      width: 134px; height: 5px;
+      background: #1C1C1E; border-radius: 3px; opacity: 0.18;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .modal-title {
+      font-family: Montserrat, sans-serif;
+      font-weight: 700; font-size: 16px; line-height: 24px;
+      color: #1E1E1E; text-align: center;
+    }
+    .modal-close {
+      position: absolute; right: 0; top: 50%;
+      transform: translateY(-50%);
+    }
+    .modal-helper {
+      font-family: Montserrat, sans-serif;
+      font-weight: 400; font-size: 12px; line-height: 16px;
+      color: #606060;
+    }
+    .modal-btn-guardar { width: 100%; }
+
+    /* ── Workers section access row ── */
+    .worker-card__access {
+      flex: 1;
+      font-family: Montserrat, sans-serif;
+      font-weight: 400; font-size: 14px; line-height: 20px;
+      color: #969BBD;
+      min-width: 0;
+    }
+
+    /* ── Workers header ── */
+    .workers-header {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .btn-eliminar {
+      font-family: Montserrat, sans-serif; font-weight: 600;
+      font-size: 12px; line-height: 16px;
+      color: #FF2947; background: none; border: none;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+    .worker-card__caret {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      background: none; border: none; cursor: pointer; padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ══ ACCESS BOTTOMSHEET ══ */
+    .acc-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 30;
+    }
+    .acc-overlay--visible { opacity: 1; pointer-events: all; }
+    .acc-bs {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: #FFFFFF; border-radius: 32px 32px 0 0;
+      box-shadow: 0px -4px 8px 0px rgba(0, 0, 0, 0.12);
+      display: flex; flex-direction: column;
+      gap: 16px; padding: 12px 16px 16px;
+      transform: translateY(100%); transition: transform 0.4s ease;
+      z-index: 31;
+    }
+    .acc-bs--visible { transform: translateY(0); }
+    .acc-header {
+      display: flex; align-items: center;
+      gap: 20px; padding: 12px 0;
+      align-self: stretch;
+    }
+    .acc-back {
+      flex-shrink: 0; width: 24px; height: 24px;
+      background: none; border: none; cursor: pointer;
+      padding: 0; display: flex; align-items: center; justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .acc-title {
+      flex: 1;
+      font-family: Montserrat, sans-serif; font-weight: 700;
+      font-size: 16px; line-height: 20px;
+      color: #121E6C; text-align: center;
+    }
+    .acc-spacer { flex-shrink: 0; width: 24px; height: 24px; }
+    .acc-cards {
+      display: flex; flex-direction: row;
+      gap: 16px; align-self: stretch;
+    }
+    .acc-card {
+      flex: 1;
+      display: flex; flex-direction: column;
+      gap: 12px; padding: 12px;
+      background: #F7F8FB; border-radius: 16px;
+      border: 1px solid transparent;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+      transition: border-color 0.12s;
+    }
+    .acc-card--selected { border-color: #EE424E; }
+    .acc-card__header {
+      display: flex; justify-content: space-between;
+      align-items: center; align-self: stretch;
+    }
+    .acc-card__radio { flex-shrink: 0; width: 20px; height: 20px; }
+    .acc-card__illus {
+      flex-shrink: 0; width: 40px; height: 40px;
+      object-fit: contain;
+    }
+    .acc-card__label {
+      font-family: Montserrat, sans-serif; font-weight: 600;
+      font-size: 14px; line-height: 20px; color: #121E6C;
+    }
+    .acc-card__desc {
+      font-family: Montserrat, sans-serif; font-weight: 400;
+      font-size: 12px; line-height: 16px; color: #1E1E1E;
+    }
+    .acc-btn-guardar { width: 100%; }
+
+    /* ══ CONFIRM DELETE MODAL ══ */
+    .conf-overlay {
+      display: none;
+      position: absolute; inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      align-items: center; justify-content: center;
+      padding: 24px 16px;
+      z-index: 40;
+    }
+    .conf-overlay--visible { display: flex; }
+    .conf-modal {
+      position: relative;
+      background: #FFFFFF; border-radius: 24px;
+      width: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 12px;
+      padding: 24px 20px 20px;
+    }
+    .conf-close {
+      position: absolute; top: 16px; right: 16px;
+      background: none; border: none; cursor: pointer; padding: 0;
+      display: flex; align-items: center; justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .conf-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #FFC400;
+      display: flex; align-items: center; justify-content: center;
+      font-family: Montserrat, sans-serif; font-weight: 700;
+      font-size: 28px; line-height: 1; color: #FFFFFF;
+      flex-shrink: 0;
+    }
+    .conf-title {
+      font-family: Montserrat, sans-serif; font-weight: 700;
+      font-size: 16px; line-height: 22px;
+      color: #1E1E1E; text-align: center; margin-top: 4px;
+    }
+    .conf-body {
+      font-family: Montserrat, sans-serif; font-weight: 400;
+      font-size: 14px; line-height: 20px;
+      color: #1E1E1E; text-align: center;
+    }
+    .conf-secondary {
+      font-family: Montserrat, sans-serif; font-weight: 400;
+      font-size: 12px; line-height: 16px;
+      color: #606060; text-align: center;
+    }
+    .conf-actions {
+      display: flex; flex-direction: column;
+      gap: 12px; align-self: stretch; margin-top: 4px;
+    }
+    .conf-btn-volver {
+      width: 100%; height: 48px; border-radius: 100px;
+      border: 1.5px solid #FF2947;
+      background: #FFFFFF; color: #FF2947;
+      font-family: Montserrat, sans-serif; font-weight: 700;
+      font-size: 14px; line-height: 20px;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ══ AYUDA ══ */
+    .ayuda-btn {
+      position: absolute; top: 40px; right: 16px;
+      display: flex; flex-direction: row; align-items: center; gap: 4px;
+      padding: 8px 8px 8px 12px;
+      background: #FFFFFF; border: none; border-radius: 100px;
+      box-shadow: 0px 4px 12px 0px rgba(18, 30, 108, 0.08);
+      cursor: pointer; height: 32px; z-index: 10;
+    }
+    .ayuda-btn__label {
+      font-family: Montserrat, sans-serif; font-weight: 500;
+      font-size: 14px; line-height: 20px; color: #121E6C;
+    }
+    .ayuda-btn__icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
+  </style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="status-bar">
+      <span class="status-bar__time">1:11 PM</span>
+      <div class="status-bar__right">
+        <svg width="17" height="11" viewBox="0 0 17 11" fill="none" aria-hidden="true">
+          <rect x="0"  y="7"    width="3.1" height="4"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="4"  y="5"    width="3.1" height="6"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="8"  y="3"    width="3.1" height="8"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="12" y="0.5"  width="3.1" height="10.5" rx="0.5" fill="#1E1E1E"/>
+        </svg>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+          <circle cx="8" cy="10.5" r="1.3" fill="#1E1E1E"/>
+          <path d="M4.8 7.5C5.8 6.5 6.9 6 8 6s2.2.5 3.2 1.5"  stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          <path d="M2.2 5C3.7 3.4 5.8 2.5 8 2.5s4.3.9 5.8 2.5" stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          <path d="M0 2.5C2.1.9 4.9 0 8 0s5.9.9 8 2.5"          stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="status-bar__carrier">Carrier</span>
+      </div>
+    </div>
+    <div class="nav-bar">
+      <div class="nav-left">
+        <button class="c-btn-close"
+                onclick="window.location.href='../index.html'"
+                aria-label="Cerrar">
+          <img src="../components/ic_close.svg" width="24" height="24" alt="">
+        </button>
+      </div>
+      <div class="nav-center"></div>
+      <div class="nav-right"></div>
+    </div>
+  </div>
+
+  <!-- ── TEXT SECTION ── -->
+  <div class="text-section">
+    <h1 class="c-screen-title">Agrega a tus trabajadores</h1>
+    <p class="subtitle">Invita a los integrantes de tu equipo y configura cuánta información podrán ver. Edítalo cuando quieras.</p>
+    <button class="btn-agregar" id="btnAgregar" aria-label="Agregar un trabajador">
+      <img src="assets/ic_add_red.svg" width="24" height="24" alt="" aria-hidden="true">
+      <span class="btn-agregar__label">Agregar un trabajador</span>
+    </button>
+  </div>
+
+  <!-- ── BODY ── -->
+  <div class="body">
+    <div class="settings-section">
+      <p class="section-label">Dueño del negocio</p>
+      <div class="owner-card">
+        <div class="owner-card__row">
+          <img src="assets/ic_people.svg" width="20" height="20" alt="" aria-hidden="true">
+          <span class="owner-card__email" id="ownerEmail">correo@gmail.com</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="workers-section" id="workersSection" style="display:none">
+      <div class="workers-header">
+        <p class="section-label">Trabajador</p>
+        <button class="btn-eliminar" id="btnEliminar">Eliminar</button>
+      </div>
+      <div id="workersList"></div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="progress-bar" role="progressbar" aria-label="Paso 3 de 4">
+      <div class="progress-bar__seg">
+        <div class="progress-bar__fill" style="width:100%"></div>
+      </div>
+      <div class="progress-bar__seg">
+        <div class="progress-bar__fill" style="width:100%"></div>
+      </div>
+      <div class="progress-bar__seg">
+        <div class="progress-bar__fill" style="width:100%"></div>
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="c-btn-text c-btn-text--active"
+              onclick="window.location.href='08-cuenta-bancaria.html'">Saltar</button>
+      <button class="c-btn-primary btn-continuar"
+              onclick="window.location.href='08-cuenta-bancaria.html'">Continuar</button>
+    </div>
+  </div>
+
+  <!-- ── MODAL CONTAINER (overlay + panel + keyboard) ── -->
+  <div class="modal-container" id="modalContainer" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+
+    <!-- panel -->
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="modalTitle">Correo trabajador</span>
+        <button class="c-btn-close modal-close" id="modalClose" aria-label="Cerrar">
+          <img src="../components/ic_close.svg" width="24" height="24" alt="">
+        </button>
+      </div>
+      <div class="c-form-group">
+        <label class="c-input-label" for="workerEmail">Trabajador</label>
+        <input
+          id="workerEmail"
+          class="c-input-field c-input-field--active"
+          type="text"
+          inputmode="none"
+          placeholder="correocolab@gmail.com"
+          autocomplete="off"
+          readonly
+        >
+      </div>
+      <p class="modal-helper">Configura los permisos en el siguiente paso.</p>
+      <button class="c-btn-primary modal-btn-guardar" id="btnGuardar" disabled>Guardar</button>
+    </div>
+
+    <!-- QWERTY keyboard -->
+    <div class="kb-email" id="kbEmail" aria-hidden="true">
+      <div class="kb-email-rows">
+
+        <!-- Row 1: q w e r t y u i o p -->
+        <div class="kb-email-row">
+          <div class="kb-ltr" onclick="typeKey('q')">q</div>
+          <div class="kb-ltr" onclick="typeKey('w')">w</div>
+          <div class="kb-ltr" onclick="typeKey('e')">e</div>
+          <div class="kb-ltr" onclick="typeKey('r')">r</div>
+          <div class="kb-ltr" onclick="typeKey('t')">t</div>
+          <div class="kb-ltr" onclick="typeKey('y')">y</div>
+          <div class="kb-ltr" onclick="typeKey('u')">u</div>
+          <div class="kb-ltr" onclick="typeKey('i')">i</div>
+          <div class="kb-ltr" onclick="typeKey('o')">o</div>
+          <div class="kb-ltr" onclick="typeKey('p')">p</div>
+        </div>
+
+        <!-- Row 2: a s d f g h j k l (centered) -->
+        <div class="kb-email-row kb-email-row--mid">
+          <div class="kb-ltr" onclick="typeKey('a')">a</div>
+          <div class="kb-ltr" onclick="typeKey('s')">s</div>
+          <div class="kb-ltr" onclick="typeKey('d')">d</div>
+          <div class="kb-ltr" onclick="typeKey('f')">f</div>
+          <div class="kb-ltr" onclick="typeKey('g')">g</div>
+          <div class="kb-ltr" onclick="typeKey('h')">h</div>
+          <div class="kb-ltr" onclick="typeKey('j')">j</div>
+          <div class="kb-ltr" onclick="typeKey('k')">k</div>
+          <div class="kb-ltr" onclick="typeKey('l')">l</div>
+        </div>
+
+        <!-- Row 3: ⇧ z x c v b n m ⌫ -->
+        <div class="kb-email-row">
+          <div class="kb-ltr kb-ltr--special kb-ltr--sm" onclick="void(0)" aria-label="Mayúsculas">⇧</div>
+          <div class="kb-ltr" onclick="typeKey('z')">z</div>
+          <div class="kb-ltr" onclick="typeKey('x')">x</div>
+          <div class="kb-ltr" onclick="typeKey('c')">c</div>
+          <div class="kb-ltr" onclick="typeKey('v')">v</div>
+          <div class="kb-ltr" onclick="typeKey('b')">b</div>
+          <div class="kb-ltr" onclick="typeKey('n')">n</div>
+          <div class="kb-ltr" onclick="typeKey('m')">m</div>
+          <div class="kb-ltr kb-ltr--special kb-ltr--sm" onclick="deleteKey()" aria-label="Borrar">⌫</div>
+        </div>
+
+        <!-- Row 4: 123 | @ | _ | space | . | - | return -->
+        <div class="kb-email-row">
+          <div class="kb-ltr kb-ltr--special" onclick="void(0)">123</div>
+          <div class="kb-ltr kb-ltr--sm" onclick="typeKey('@')">@</div>
+          <div class="kb-ltr kb-ltr--sm" onclick="typeKey('_')">_</div>
+          <div class="kb-ltr kb-ltr--space" onclick="typeKey(' ')">espacio</div>
+          <div class="kb-ltr kb-ltr--sm" onclick="typeKey('.')">.</div>
+          <div class="kb-ltr kb-ltr--sm" onclick="typeKey('-')">-</div>
+          <div class="kb-ltr kb-ltr--return" onclick="closeModal()">return</div>
+        </div>
+
+      </div>
+      <div class="kb-home"></div>
+    </div>
+
+  </div>
+
+  <!-- ── ACCESS TYPE BOTTOMSHEET ── -->
+  <div class="acc-overlay" id="accOverlay"></div>
+  <div class="acc-bs" id="accBs" role="dialog" aria-modal="true" aria-labelledby="accTitle">
+
+    <div class="acc-header">
+      <button class="acc-back" id="accBack" aria-label="Volver">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18L9 12L15 6" stroke="#121E6C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <p class="acc-title" id="accTitle">Tipo de acceso</p>
+      <div class="acc-spacer" aria-hidden="true"></div>
+    </div>
+
+    <div class="acc-cards">
+
+      <div class="acc-card" id="cardLimitado">
+        <div class="acc-card__header">
+          <div class="acc-card__radio" id="radioLimitado"></div>
+          <img class="acc-card__illus" src="assets/ill_lock.png" width="40" height="40" alt="" aria-hidden="true">
+        </div>
+        <p class="acc-card__label">Acceso limitado</p>
+        <p class="acc-card__desc">Ideal para trabajadores. Solo pueden cobrar y ver su propio historial de ventas. Sin acceso al dinero ni a otros datos.</p>
+      </div>
+
+      <div class="acc-card" id="cardCompleto">
+        <div class="acc-card__header">
+          <div class="acc-card__radio" id="radioCompleto"></div>
+          <img class="acc-card__illus" src="assets/ill_complete_access.png" width="40" height="40" alt="" aria-hidden="true">
+        </div>
+        <p class="acc-card__label">Acceso completo</p>
+        <p class="acc-card__desc">Para personas de total confianza. Pueden ver todos los datos, transferir dinero y gestionar usuarios.</p>
+      </div>
+
+    </div>
+
+    <button class="c-btn-primary acc-btn-guardar" id="accBtnGuardar">Guardar</button>
+
+  </div>
+
+  <!-- ── CONFIRM DELETE MODAL ── -->
+  <div class="conf-overlay" id="confOverlay">
+    <div class="conf-modal" role="dialog" aria-modal="true" aria-labelledby="confTitle">
+      <button class="conf-close" id="confClose" aria-label="Cerrar">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6L18 18" stroke="#1E1E1E" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="conf-icon" aria-hidden="true">!</div>
+      <p class="conf-title" id="confTitle">¿Solo tú tendrás acceso?</p>
+      <p class="conf-body">Si no agregas trabajadores, solo tú podrás ingresar a este negocio.</p>
+      <p class="conf-secondary">Asignar usuarios a tu equipo te ayuda a proteger tu información y mantener todo en orden.</p>
+      <div class="conf-actions">
+        <button class="c-btn-primary" id="confBtnConfirm">Confirmar</button>
+        <button class="conf-btn-volver" id="confBtnVolver">Volver</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AYUDA ── -->
+  <button class="ayuda-btn" aria-label="Ayuda">
+    <span class="ayuda-btn__label">Ayuda</span>
+    <span class="ayuda-btn__icon">
+      <img src="../fase-1/ic_ayuda_bot.svg" width="20" height="20" alt="">
+    </span>
+  </button>
+
+</div><!-- /phone -->
+
+<script>
+  // ── State ──
+  var workers = JSON.parse(localStorage.getItem('trabajadores') || '[]');
+  var editingIndex = -1;
+  var selectedPermiso = 'limitado';
+
+  var RADIO_DEFAULT  = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#969BBD" stroke-width="1.5"/></svg>';
+  var RADIO_SELECTED = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#FF2947" stroke-width="1.5"/><circle cx="10" cy="10" r="5.5" fill="#FF2947"/></svg>';
+  var CARET_SVG      = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="#969BBD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var LOCK_CLOSED    = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6.5 8.5V6.5C6.5 4.567 8.067 3 10 3C11.933 3 13.5 4.567 13.5 6.5V8.5" stroke="#1F2A74" stroke-width="1.5" stroke-linecap="round"/><rect x="4" y="8.5" width="12" height="8.5" rx="2" stroke="#1F2A74" stroke-width="1.5"/><circle cx="10" cy="13" r="1.5" fill="#1F2A74"/></svg>';
+  var LOCK_OPEN      = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6.5 8.5V6.5C6.5 4.567 8.067 3 10 3C11.933 3 13.5 4.567 13.5 6.5" stroke="#1F2A74" stroke-width="1.5" stroke-linecap="round"/><rect x="4" y="8.5" width="12" height="8.5" rx="2" stroke="#1F2A74" stroke-width="1.5"/><circle cx="10" cy="13" r="1.5" fill="#1F2A74"/></svg>';
+
+  // ── Workers list ──
+  function saveWorkers() {
+    localStorage.setItem('trabajadores', JSON.stringify(workers));
+  }
+
+  function renderWorkers() {
+    var list = document.getElementById('workersList');
+    list.innerHTML = '';
+    workers.forEach(function(w, i) {
+      var accessLabel = w.permiso === 'completo' ? 'Acceso completo' : 'Acceso limitado';
+      var lockIcon    = w.permiso === 'completo' ? LOCK_OPEN : LOCK_CLOSED;
+      var card = document.createElement('div');
+      card.className = 'worker-card';
+      card.innerHTML =
+        '<div class="worker-card__row">' +
+          '<img src="assets/ic_people.svg" width="20" height="20" alt="" aria-hidden="true">' +
+          '<span class="worker-card__email">' + w.correo + '</span>' +
+        '</div>' +
+        '<div class="worker-card__divider"></div>' +
+        '<div class="worker-card__row">' +
+          '<span class="worker-card__lock" aria-hidden="true">' + lockIcon + '</span>' +
+          '<span class="worker-card__access">' + accessLabel + '</span>' +
+          '<span class="worker-card__edit">Editar</span>' +
+          '<button class="worker-card__caret" aria-label="Editar tipo de acceso" data-index="' + i + '">' + CARET_SVG + '</button>' +
+        '</div>';
+      list.appendChild(card);
+    });
+
+    list.querySelectorAll('.worker-card__caret').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        openAccessModal(parseInt(this.dataset.index));
+      });
+    });
+
+    document.getElementById('workersSection').style.display = workers.length > 0 ? 'flex' : 'none';
+  }
+
+  // ── Email modal ──
+  var modalContainer = document.getElementById('modalContainer');
+  var inputEmail     = document.getElementById('workerEmail');
+  var btnGuardar     = document.getElementById('btnGuardar');
+
+  function isEmailValid(v) {
+    return /@(gmail|hotmail|yahoo)\.com$/i.test(v.trim());
+  }
+
+  function openModal() {
+    inputEmail.value = '';
+    btnGuardar.disabled = true;
+    modalContainer.classList.add('modal-container--visible');
+  }
+
+  function closeModal() {
+    modalContainer.classList.remove('modal-container--visible');
+  }
+
+  function typeKey(char) {
+    inputEmail.value += char;
+    btnGuardar.disabled = !isEmailValid(inputEmail.value);
+  }
+
+  function deleteKey() {
+    inputEmail.value = inputEmail.value.slice(0, -1);
+    btnGuardar.disabled = !isEmailValid(inputEmail.value);
+  }
+
+  // ── Access bottomsheet ──
+  function updateAccessOptions() {
+    document.getElementById('radioLimitado').innerHTML = selectedPermiso === 'limitado' ? RADIO_SELECTED : RADIO_DEFAULT;
+    document.getElementById('radioCompleto').innerHTML = selectedPermiso === 'completo' ? RADIO_SELECTED : RADIO_DEFAULT;
+    document.getElementById('cardLimitado').classList.toggle('acc-card--selected', selectedPermiso === 'limitado');
+    document.getElementById('cardCompleto').classList.toggle('acc-card--selected', selectedPermiso === 'completo');
+  }
+
+  function openAccessModal(index) {
+    editingIndex = index;
+    selectedPermiso = workers[index].permiso || 'limitado';
+    updateAccessOptions();
+    document.getElementById('accOverlay').classList.add('acc-overlay--visible');
+    document.getElementById('accBs').classList.add('acc-bs--visible');
+  }
+
+  function closeAccessModal() {
+    document.getElementById('accOverlay').classList.remove('acc-overlay--visible');
+    document.getElementById('accBs').classList.remove('acc-bs--visible');
+  }
+
+  function selectAccess(permiso) {
+    selectedPermiso = permiso;
+    updateAccessOptions();
+  }
+
+  // ── Event listeners ──
+  document.getElementById('ownerEmail').textContent = localStorage.getItem('correo') || 'correo@gmail.com';
+
+  document.getElementById('btnAgregar').addEventListener('click', openModal);
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+
+  function openConfirmModal() {
+    document.getElementById('confOverlay').classList.add('conf-overlay--visible');
+  }
+
+  function closeConfirmModal() {
+    document.getElementById('confOverlay').classList.remove('conf-overlay--visible');
+  }
+
+  document.getElementById('btnEliminar').addEventListener('click', function() {
+    if (workers.length === 0) return;
+    openConfirmModal();
+  });
+
+  document.getElementById('confClose').addEventListener('click', closeConfirmModal);
+  document.getElementById('confBtnVolver').addEventListener('click', closeConfirmModal);
+  document.getElementById('confBtnConfirm').addEventListener('click', function() {
+    workers.pop();
+    saveWorkers();
+    renderWorkers();
+    closeConfirmModal();
+  });
+
+  document.getElementById('cardLimitado').addEventListener('click', function() { selectAccess('limitado'); });
+  document.getElementById('cardCompleto').addEventListener('click', function() { selectAccess('completo'); });
+  document.getElementById('accBack').addEventListener('click', closeAccessModal);
+  document.getElementById('accOverlay').addEventListener('click', closeAccessModal);
+
+  document.getElementById('accBtnGuardar').addEventListener('click', function() {
+    if (editingIndex < 0 || editingIndex >= workers.length) return;
+    workers[editingIndex].permiso = selectedPermiso;
+    saveWorkers();
+    renderWorkers();
+    closeAccessModal();
+  });
+
+  btnGuardar.addEventListener('click', function() {
+    if (!isEmailValid(inputEmail.value)) return;
+    workers.push({ correo: inputEmail.value.trim(), permiso: 'limitado' });
+    saveWorkers();
+    renderWorkers();
+    closeModal();
+  });
+
+  // ── Init ──
+  renderWorkers();
+</script>
+
+</body>
+</html>

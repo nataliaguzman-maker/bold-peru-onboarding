@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=393, initial-scale=1">
+  <title>Bold – Celular y correo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../components/shared.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #D0D3E0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 0;
+      min-height: 100vh;
+    }
+
+    /* ── Phone shell: 393 × 863 (includes keyboard) ── */
+    .phone {
+      width: 393px;
+      height: 863px;
+      background: #F7F8FB;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ══ HEADER ══ */
+    .header {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-bottom: 16px;
+    }
+
+    .status-bar {
+      height: 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+    }
+    .status-bar__time {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      font-family: Roboto, sans-serif;
+      font-weight: 600; font-size: 12px;
+      color: #1E1E1E; line-height: 1;
+    }
+    .status-bar__right {
+      position: absolute; right: 5px; top: 50%;
+      transform: translateY(-50%);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .status-bar__carrier {
+      font-family: Roboto, sans-serif;
+      font-weight: 400; font-size: 12px;
+      letter-spacing: -0.0014em; color: #1E1E1E; line-height: 1;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 12px;
+    }
+    .nav-left { width: 102px; display: flex; align-items: center; }
+    .nav-center { flex: 1; }
+    .nav-right { width: 102px; display: flex; justify-content: flex-end; }
+
+    /* ══ BODY ══ */
+    .body {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      padding: 0 16px;
+      scrollbar-width: none;
+    }
+    .body::-webkit-scrollbar { display: none; }
+
+    .text-section {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .title {
+      font-family: Montserrat, sans-serif;
+      font-weight: 600; font-size: 20px; line-height: 24px; color: #1E1E1E;
+    }
+    .subtitle {
+      font-family: Montserrat, sans-serif;
+      font-weight: 400; font-size: 14px; line-height: 20px; color: #1E1E1E;
+    }
+
+    /* ── Fields container ── */
+    .fields {
+      display: flex; flex-direction: column; gap: 32px;
+    }
+
+    /* Field group (label + input) */
+    .field-group {
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .field-label {
+      font-family: Montserrat, sans-serif;
+      font-weight: 600; font-size: 14px;
+      line-height: 20px; color: #121E6C;
+    }
+
+    /* ── Phone input row ── */
+    .phone-row {
+      display: flex; flex-direction: row;
+      align-items: stretch; gap: 8px;
+    }
+
+    .country-code {
+      display: flex; flex-direction: row;
+      align-items: center; gap: 4px;
+      padding: 8px 12px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      flex-shrink: 0;
+      border: 1.5px solid transparent;
+    }
+    .country-code__plus {
+      font-family: Montserrat, sans-serif;
+      font-weight: 400; font-size: 14px;
+      line-height: 20px; color: #606060;
+      white-space: nowrap;
+    }
+
+    .input-field {
+      flex: 1;
+      height: 40px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      border: 1.5px solid transparent;
+      padding: 0 12px;
+      font-family: Montserrat, sans-serif;
+      font-weight: 400; font-size: 14px;
+      line-height: 20px; color: #1E1E1E;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .input-field::placeholder { color: #606060; }
+    .input-field:focus        { border-color: #121E6C; }
+
+    /* ── Checkboxes ── */
+    .consent {
+      display: flex; flex-direction: column; gap: 16px;
+    }
+
+    .cb-row {
+      display: flex; flex-direction: row;
+      align-items: flex-start; gap: 8px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cb-row:nth-child(1) { width: 343px; }
+
+    /* Hide native checkbox */
+    .cb-row input[type="checkbox"] { display: none; }
+
+    /* Custom checkbox box */
+    .cb-box {
+      flex-shrink: 0;
+      width: 24px; height: 24px;
+      border: 1px solid #091144;
+      border-radius: 4px;
+      background: #FFFFFF;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, border-color 0.15s;
+      margin-top: 0;
+    }
+    .cb-box::after {
+      content: '';
+      display: none;
+      width: 13px; height: 10px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 10' fill='none'%3E%3Cpath d='M1.5 5L5 8.5L11.5 1.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+    .cb-row input:checked ~ .cb-box {
+      background: #091144;
+      border-color: #091144;
+    }
+    .cb-row input:checked ~ .cb-box::after { display: block; }
+
+    .cb-label {
+      font-family: Montserrat, sans-serif;
+      font-weight: 400; font-size: 14px;
+      line-height: 20px; color: #1E1E1E;
+      padding-top: 2px;
+    }
+    .cb-label strong {
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* ══ FOOTER ══ */
+    .footer {
+      flex-shrink: 0;
+      padding: 0 16px 20px;
+    }
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Atrás — active blue on this screen */
+    .btn-atras {
+      background: none; border: none;
+      font-family: Montserrat, sans-serif;
+      font-weight: 700; font-size: 14px;
+      line-height: 20px; color: #121E6C;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      cursor: pointer; padding: 12px 0;
+    }
+
+    /* Continuar — disabled until valid */
+    .btn-continuar {
+      width: 140px; height: 48px;
+      border: none; border-radius: 100px;
+      font-family: Montserrat, sans-serif;
+      font-weight: 700; font-size: 14px;
+      line-height: 20px; color: #FFFFFF;
+      background: #F48990;   /* disabled state */
+      cursor: default;
+      pointer-events: none;
+      transition: background 0.2s;
+    }
+    .btn-continuar.enabled {
+      background: #FF2947;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+    .btn-continuar.enabled:active { opacity: 0.85; }
+
+        .kb-numeric {
+      flex-shrink: 0; width: 100%; height: 290px;
+      background: #D1D3D9; position: relative; overflow: hidden;
+    }
+    .kb-num-rows {
+      position: absolute; left: 3px; right: 3px; top: 6px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .kb-num-row { display: flex; gap: 6px; }
+    .kb-num-key {
+      flex: 1; height: 55px;
+      background: #FFFFFF; border-radius: 4.6px;
+      box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.30);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      cursor: pointer; user-select: none; gap: 1px;
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+      font-size: 22px; font-weight: 300; color: #000;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .kb-num-key:active { background: #ACB0BD; }
+    .kb-num-key__sub {
+      font-size: 9px; font-weight: 500; letter-spacing: 0.08em;
+      color: #000; line-height: 1;
+    }
+    .kb-num-key--special {
+      background: #ACB0BE; box-shadow: none;
+    }
+    .kb-num-key--special:active { background: #888D9A; }
+    .kb-num-key--empty {
+      background: #D1D3D9; box-shadow: none; pointer-events: none;
+    }
+
+    .kb-home {
+      position: absolute;
+      bottom: 8px; left: 50%;
+      transform: translateX(-50%);
+      width: 134px; height: 5px;
+      background: #1C1C1E;
+      border-radius: 3px;
+      opacity: 0.18;
+    }
+
+    /* ══ Keyboard visibility ══ */
+    .keyboard { display: none; }
+    .keyboard.kb-active { display: block; }
+    .kb-numeric { display: none; }
+    .kb-numeric.kb-active { display: block; }
+
+    /* ══ iOS EMAIL KEYBOARD ══ */
+    .kb-email .kb-rows {
+      left: 3px;
+      right: 3px;
+      width: auto;
+    }
+    .kb-email .kb-row {
+      width: 100%;
+    }
+
+    .kb-row--letters { gap: 6px; padding: 0 3px; }
+    .kb-row--mid     { gap: 6px; padding: 0 22px; }
+    .kb-row--bottom  { gap: 6px; padding: 0 3px; }
+
+    .kb-ltr {
+      flex: 1;
+      height: 46px;
+      min-width: 0;
+      background: #FFFFFF;
+      border-radius: 4.6px;
+      box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.30);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; user-select: none;
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+      font-size: 17px; font-weight: 400;
+      color: #000;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .kb-ltr:active { background: #ACB0BD; }
+
+    .kb-ltr--special {
+      flex: 0 0 44px;
+      background: #ACB0BE;
+      box-shadow: none;
+      font-size: 13px;
+    }
+    .kb-ltr--special:active { background: #888D9A; }
+
+    .kb-ltr--space  { flex: 4; font-size: 15px; }
+    .kb-ltr--at     { flex: 0 0 44px; }
+    .kb-ltr--dotcom { flex: 0 0 58px; font-size: 13px; }
+    .kb-ltr--return {
+      flex: 0 0 80px;
+      background: #ACB0BE; box-shadow: none;
+      font-size: 15px;
+    }
+    .kb-ltr--return:active { background: #888D9A; }
+
+    /* ══ AYUDA floating button ══ */
+    .ayuda-btn {
+      position: absolute;
+      top: 40px; right: 16px;
+      display: flex; flex-direction: row;
+      align-items: center; gap: 4px;
+      padding: 8px 8px 8px 12px;
+      background: #FFFFFF;
+      border: none;
+      border-radius: 100px;
+      box-shadow: 0px 4px 12px 0px rgba(18, 30, 108, 0.08);
+      cursor: pointer;
+      height: 32px;
+      z-index: 10;
+    }
+    .ayuda-btn__label {
+      font-family: Montserrat, sans-serif;
+      font-weight: 500; font-size: 14px;
+      line-height: 20px; color: #121E6C;
+    }
+    .ayuda-btn__icon {
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="status-bar">
+      <span class="status-bar__time">1:11 PM</span>
+      <div class="status-bar__right">
+        <svg width="17" height="11" viewBox="0 0 17 11" fill="none" aria-hidden="true">
+          <rect x="0"  y="7"    width="3.1" height="4"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="4"  y="5"    width="3.1" height="6"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="8"  y="3"    width="3.1" height="8"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="12" y="0.5"  width="3.1" height="10.5" rx="0.5" fill="#1E1E1E"/>
+        </svg>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+          <circle cx="8" cy="10.5" r="1.3" fill="#1E1E1E"/>
+          <path d="M4.8 7.5C5.8 6.5 6.9 6 8 6s2.2.5 3.2 1.5"   stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          <path d="M2.2 5C3.7 3.4 5.8 2.5 8 2.5s4.3.9 5.8 2.5"  stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          <path d="M0 2.5C2.1.9 4.9 0 8 0s5.9.9 8 2.5"           stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="status-bar__carrier">Carrier</span>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <div class="nav-left">
+        <button class="c-btn-close"
+                onclick="window.location.href='../index.html?skip_location=true'"
+                aria-label="Cerrar">
+          <img src="../components/ic_close.svg" width="24" height="24" alt="">
+        </button>
+      </div>
+      <div class="nav-center"></div>
+      <div class="nav-right"></div>
+    </div>
+  </div>
+
+  <!-- ── BODY ── -->
+  <div class="body">
+
+    <div class="text-section">
+      <h1 class="title">Inicia con tu número celular y correo</h1>
+      <p class="subtitle">Recuerda que Bold es una entidad regulada que protege tu información.</p>
+    </div>
+
+    <div class="fields">
+
+      <!-- Número celular -->
+      <div class="field-group">
+        <span class="field-label">Número celular</span>
+        <div class="phone-row">
+          <div class="country-code" id="countryCode">
+            <img src="flag_peru.svg" width="24" height="24" alt="Perú">
+            <span class="country-code__plus">+51</span>
+          </div>
+          <div class="c-input-wrap">
+            <input
+              id="phoneInput"
+              class="input-field"
+              type="tel"
+              placeholder="Escribe tu número"
+              maxlength="12"
+              autocomplete="off"
+              autofocus
+              oninput="validate()"
+            >
+            <span class="c-input-icon" id="phoneErrorIcon" aria-hidden="true">
+              <img src="../components/ic_error.svg" width="24" height="24" alt="">
+            </span>
+          </div>
+        </div>
+        <p class="c-error-msg" id="phoneErrorMsg">Revisa que el número sea correcto.</p>
+      </div>
+
+      <!-- Correo electrónico -->
+      <div class="field-group">
+        <span class="field-label">Correo electrónico</span>
+        <div class="c-input-wrap">
+          <input
+            id="emailInput"
+            class="input-field"
+            type="email"
+            placeholder="Ej: correo@gmail.com"
+            autocomplete="off"
+            autocapitalize="none"
+            autocorrect="off"
+            oninput="validate()"
+          >
+          <span class="c-input-icon" id="emailCheck" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="9" fill="#28A745"/>
+              <path d="M4.5 9L7.5 12L13.5 6" stroke="white" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="c-input-icon" id="emailErrorIcon" aria-hidden="true">
+            <img src="../components/ic_error.svg" width="24" height="24" alt="">
+          </span>
+        </div>
+        <p class="c-error-msg" id="emailErrorMsg">Ingresa un correo @gmail.com, @hotmail.com o @yahoo.com.</p>
+      </div>
+
+      <!-- Checkboxes de consentimiento -->
+      <div class="consent">
+        <label class="cb-row" onpointerdown="dismissKeyboard(event)">
+          <input type="checkbox" id="check1" onchange="validate()">
+          <span class="cb-box"></span>
+          <span class="cb-label">Autorizo a Bold a tratar mis datos según la
+            <strong>Política de datos personales.</strong>
+          </span>
+        </label>
+
+        <label class="cb-row" style="width:100%" onpointerdown="dismissKeyboard(event)">
+          <input type="checkbox" id="check2" onchange="validate()">
+          <span class="cb-box"></span>
+          <span class="cb-label">Acepto que me contacten por SMS y WhatsApp.</span>
+        </label>
+      </div>
+
+    </div>
+  </div><!-- /body -->
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="action-bar">
+      <button class="btn-atras"
+              onclick="window.location.href='index.html'">Atrás</button>
+      <button class="btn-continuar" id="btnContinuar" onclick="goNext()">
+        Continuar
+      </button>
+    </div>
+  </div>
+
+  <!-- ── iOS NUMERIC KEYBOARD ── -->
+  <div class="kb-numeric" id="kbNumeric" aria-hidden="true">
+    <div class="kb-num-rows">
+      <div class="kb-num-row">
+        <div class="kb-num-key" onclick="typeKey('1')">1<span class="kb-num-key__sub">&nbsp;</span></div>
+        <div class="kb-num-key" onclick="typeKey('2')">2<span class="kb-num-key__sub">ABC</span></div>
+        <div class="kb-num-key" onclick="typeKey('3')">3<span class="kb-num-key__sub">DEF</span></div>
+      </div>
+      <div class="kb-num-row">
+        <div class="kb-num-key" onclick="typeKey('4')">4<span class="kb-num-key__sub">GHI</span></div>
+        <div class="kb-num-key" onclick="typeKey('5')">5<span class="kb-num-key__sub">JKL</span></div>
+        <div class="kb-num-key" onclick="typeKey('6')">6<span class="kb-num-key__sub">MNO</span></div>
+      </div>
+      <div class="kb-num-row">
+        <div class="kb-num-key" onclick="typeKey('7')">7<span class="kb-num-key__sub">PQRS</span></div>
+        <div class="kb-num-key" onclick="typeKey('8')">8<span class="kb-num-key__sub">TUV</span></div>
+        <div class="kb-num-key" onclick="typeKey('9')">9<span class="kb-num-key__sub">WXYZ</span></div>
+      </div>
+      <div class="kb-num-row">
+        <div class="kb-num-key kb-num-key--empty"></div>
+        <div class="kb-num-key" onclick="typeKey('0')">0</div>
+        <div class="kb-num-key kb-num-key--special" onclick="deleteKey()">
+          <svg width="20" height="15" viewBox="0 0 24 18" fill="none">
+            <path d="M9.5 1H21C22.1 1 23 1.9 23 3V15C23 16.1 22.1 17 21 17H9.5C8.9 17 8.3 16.7 7.9 16.2L1.5 9L7.9 1.8C8.3 1.3 8.9 1 9.5 1Z" fill="none" stroke="#3C3C43" stroke-width="1.2" stroke-opacity="0.6"/>
+            <path d="M15 6L11 12M11 6L15 12" stroke="#3C3C43" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="kb-home"></div>
+  </div>
+
+  <!-- ── iOS EMAIL KEYBOARD ── -->
+  <div class="keyboard kb-email" id="kbEmail" aria-hidden="true">
+    <div class="kb-rows">
+      <!-- Row 1: Q–P -->
+      <div class="kb-row kb-row--letters">
+        <div class="kb-ltr" onclick="typeKey('q')">q</div>
+        <div class="kb-ltr" onclick="typeKey('w')">w</div>
+        <div class="kb-ltr" onclick="typeKey('e')">e</div>
+        <div class="kb-ltr" onclick="typeKey('r')">r</div>
+        <div class="kb-ltr" onclick="typeKey('t')">t</div>
+        <div class="kb-ltr" onclick="typeKey('y')">y</div>
+        <div class="kb-ltr" onclick="typeKey('u')">u</div>
+        <div class="kb-ltr" onclick="typeKey('i')">i</div>
+        <div class="kb-ltr" onclick="typeKey('o')">o</div>
+        <div class="kb-ltr" onclick="typeKey('p')">p</div>
+      </div>
+      <!-- Row 2: A–L (9 keys, centered) -->
+      <div class="kb-row kb-row--mid">
+        <div class="kb-ltr" onclick="typeKey('a')">a</div>
+        <div class="kb-ltr" onclick="typeKey('s')">s</div>
+        <div class="kb-ltr" onclick="typeKey('d')">d</div>
+        <div class="kb-ltr" onclick="typeKey('f')">f</div>
+        <div class="kb-ltr" onclick="typeKey('g')">g</div>
+        <div class="kb-ltr" onclick="typeKey('h')">h</div>
+        <div class="kb-ltr" onclick="typeKey('j')">j</div>
+        <div class="kb-ltr" onclick="typeKey('k')">k</div>
+        <div class="kb-ltr" onclick="typeKey('l')">l</div>
+      </div>
+      <!-- Row 3: ⇧  Z–M  ⌫ -->
+      <div class="kb-row kb-row--letters">
+        <div class="kb-ltr kb-ltr--special" style="flex:0 0 44px">⇧</div>
+        <div class="kb-ltr" onclick="typeKey('z')">z</div>
+        <div class="kb-ltr" onclick="typeKey('x')">x</div>
+        <div class="kb-ltr" onclick="typeKey('c')">c</div>
+        <div class="kb-ltr" onclick="typeKey('v')">v</div>
+        <div class="kb-ltr" onclick="typeKey('b')">b</div>
+        <div class="kb-ltr" onclick="typeKey('n')">n</div>
+        <div class="kb-ltr" onclick="typeKey('m')">m</div>
+        <div class="kb-ltr kb-ltr--special" style="flex:0 0 44px" onclick="deleteKey()">
+          <svg width="20" height="15" viewBox="0 0 24 18" fill="none">
+            <path d="M9.5 1H21C22.1 1 23 1.9 23 3V15C23 16.1 22.1 17 21 17H9.5C8.9 17 8.3 16.7 7.9 16.2L1.5 9L7.9 1.8C8.3 1.3 8.9 1 9.5 1Z" fill="none" stroke="#3C3C43" stroke-width="1.2" stroke-opacity="0.6"/>
+            <path d="M15 6L11 12M11 6L15 12" stroke="#3C3C43" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6"/>
+          </svg>
+        </div>
+      </div>
+      <!-- Row 4: 123 | space | @ | .com | return -->
+      <div class="kb-row kb-row--bottom">
+        <div class="kb-ltr kb-ltr--special kb-ltr--return" style="flex:0 0 44px">123</div>
+        <div class="kb-ltr kb-ltr--space" onclick="typeKey(' ')">espacio</div>
+        <div class="kb-ltr kb-ltr--at" onclick="typeKey('@')">@</div>
+        <div class="kb-ltr kb-ltr--dotcom" onclick="typeKey('.com')">.com</div>
+        <div class="kb-ltr kb-ltr--return">return</div>
+      </div>
+    </div>
+    <div class="kb-home"></div>
+  </div>
+
+  <!-- ── AYUDA floating button ── -->
+  <button class="ayuda-btn" aria-label="Ayuda">
+    <span class="ayuda-btn__label">Ayuda</span>
+    <span class="ayuda-btn__icon">
+      <img src="ic_ayuda_bot.svg" width="20" height="20" alt="">
+    </span>
+  </button>
+
+</div><!-- /phone -->
+
+<script>
+  const phoneInput     = document.getElementById('phoneInput');
+  const emailInput     = document.getElementById('emailInput');
+  const countryCode    = document.getElementById('countryCode');
+  const phoneErrorIcon = document.getElementById('phoneErrorIcon');
+  const phoneErrorMsg  = document.getElementById('phoneErrorMsg');
+  const emailCheck     = document.getElementById('emailCheck');
+  const emailErrorIcon = document.getElementById('emailErrorIcon');
+  const emailErrorMsg  = document.getElementById('emailErrorMsg');
+  const btnContinuar   = document.getElementById('btnContinuar');
+  const kbNumeric      = document.getElementById('kbNumeric');
+  const kbEmail        = document.getElementById('kbEmail');
+
+  let activeInput = phoneInput;
+
+  /* ── Keyboard show / hide ── */
+  function showKeyboard(type) {
+    kbNumeric.classList.toggle('kb-active', type === 'numeric');
+    kbEmail.classList.toggle('kb-active',   type === 'email');
+  }
+
+  function hideKeyboard() {
+    kbNumeric.classList.remove('kb-active');
+    kbEmail.classList.remove('kb-active');
+  }
+
+  /* ── Error state helpers ── */
+  function setPhoneError(on) {
+    phoneInput.classList.toggle('c-field-error', on);
+    countryCode.classList.toggle('c-country-error', on);
+    phoneErrorIcon.classList.toggle('c-visible', on);
+    phoneErrorMsg.classList.toggle('c-visible', on);
+  }
+
+  function setEmailError(on) {
+    emailInput.classList.toggle('c-field-error', on);
+    emailErrorIcon.classList.toggle('c-visible', on);
+    emailErrorMsg.classList.toggle('c-visible', on);
+    if (on) emailCheck.classList.remove('c-visible');
+  }
+
+  /* Phone focus → show numeric keyboard, clear error */
+  phoneInput.addEventListener('focus', () => {
+    activeInput = phoneInput;
+    showKeyboard('numeric');
+    setPhoneError(false);
+  });
+
+  /* Phone blur → show error if non-empty and invalid */
+  phoneInput.addEventListener('blur', () => {
+    if (phoneInput.value.length > 0 && !isPhoneValid(phoneInput.value)) {
+      setPhoneError(true);
+    }
+  });
+
+  /* Email focus → hide virtual keyboard (native iOS keyboard handles input), clear error */
+  emailInput.addEventListener('focus', () => {
+    activeInput = emailInput;
+    hideKeyboard();
+    setEmailError(false);
+    emailCheck.classList.remove('c-visible');
+  });
+
+  /* Email blur → show error if non-empty and invalid */
+  emailInput.addEventListener('blur', () => {
+    if (emailInput.value.length > 0 && !isEmailValid(emailInput.value)) {
+      setEmailError(true);
+    }
+  });
+
+  /* Checkbox tap: blur active input and hide keyboard */
+  function dismissKeyboard(e) {
+    if (document.activeElement) document.activeElement.blur();
+    hideKeyboard();
+  }
+
+  /* Pre-fill from localStorage, then auto-focus phone */
+  window.addEventListener('load', () => {
+    const savedPhone = localStorage.getItem('celular');
+    const savedEmail = localStorage.getItem('correo');
+    if (savedPhone) phoneInput.value = savedPhone;
+    if (savedEmail) emailInput.value = savedEmail;
+    phoneInput.focus();
+    showKeyboard('numeric');
+    validate();
+  });
+
+  /* ── Validation ── */
+  function isPhoneValid(v) {
+    return /^9\d{8,}$/.test(v.replace(/\s/g, ''));
+  }
+  function isEmailValid(v) {
+    return /@(gmail|hotmail|yahoo)\.com$/i.test(v.trim());
+  }
+
+  /* validate() is called on-input: updates button state and green check only */
+  function validate() {
+    const phoneOk = isPhoneValid(phoneInput.value);
+    const emailOk = isEmailValid(emailInput.value);
+    const c1 = document.getElementById('check1').checked;
+    const c2 = document.getElementById('check2').checked;
+
+    /* Green check appears while typing once email is valid */
+    emailCheck.classList.toggle('c-visible', emailOk && emailInput.value.length > 0);
+    /* Clear error icon when user corrects the field mid-typing */
+    if (phoneOk) setPhoneError(false);
+    if (emailOk) setEmailError(false);
+
+    btnContinuar.classList.toggle('enabled', phoneOk && emailOk && c1 && c2);
+  }
+
+  /* ── Navigation ── */
+  function goNext() {
+    if (!btnContinuar.classList.contains('enabled')) return;
+    localStorage.setItem('celular', phoneInput.value);
+    localStorage.setItem('correo', emailInput.value);
+    window.location.href = 'clave.html';
+  }
+
+  /* ── Virtual keyboard typing ── */
+  function typeKey(chars) {
+    const el = activeInput;
+    const start = el.selectionStart ?? el.value.length;
+    const end   = el.selectionEnd   ?? el.value.length;
+    el.value = el.value.slice(0, start) + chars + el.value.slice(end);
+    const pos = start + chars.length;
+    el.setSelectionRange(pos, pos);
+    el.focus();
+    validate();
+  }
+
+  function deleteKey() {
+    const el = activeInput;
+    const start = el.selectionStart ?? el.value.length;
+    const end   = el.selectionEnd   ?? el.value.length;
+    if (start !== end) {
+      el.value = el.value.slice(0, start) + el.value.slice(end);
+      el.setSelectionRange(start, start);
+    } else if (start > 0) {
+      el.value = el.value.slice(0, start - 1) + el.value.slice(start);
+      el.setSelectionRange(start - 1, start - 1);
+    }
+    el.focus();
+    validate();
+  }
+</script>
+
+</body>
+</html>

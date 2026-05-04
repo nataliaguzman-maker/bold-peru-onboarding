@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=393, initial-scale=1">
+  <title>Bold – Selección de país</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../components/shared.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #D0D3E0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 0;
+      min-height: 100vh;
+    }
+
+    /* ── Phone shell: 393 × 852 ── */
+    .phone {
+      width: 393px;
+      height: 852px;
+      background: #F7F8FB;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ══════════════════════════════════════
+       HEADER  (status bar + nav bar)
+       ══════════════════════════════════════ */
+    .header {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-bottom: 16px;
+      background: #F7F8FB;
+    }
+
+    /* Status bar — 20px */
+    .status-bar {
+      height: 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+    }
+    .status-bar__time {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-family: Roboto, sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      color: #1E1E1E;
+      line-height: 1;
+    }
+    .status-bar__right {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .status-bar__carrier {
+      font-family: Roboto, sans-serif;
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: -0.0014em;
+      color: #1E1E1E;
+      line-height: 1;
+    }
+
+    /* Navigation bar */
+    .nav-bar {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 12px;
+    }
+    .nav-left {
+      width: 102px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-back {
+      background: none;
+      border: none;
+      padding: 4px 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      line-height: 0;
+    }
+    .nav-center { flex: 1; }
+    .nav-right {
+      width: 102px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* ══════════════════════════════════════
+       BODY  (scrollable)
+       ══════════════════════════════════════ */
+    .body {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      padding: 0 16px;
+      /* hide scrollbar visually */
+      scrollbar-width: none;
+    }
+    .body::-webkit-scrollbar { display: none; }
+
+    /* Text section */
+    .text-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .title {
+      font-family: Montserrat, sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 24px;
+      color: #1E1E1E;
+    }
+    .subtitle {
+      font-family: Montserrat, sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      color: #1E1E1E;
+    }
+
+    /* Card list */
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Selection card */
+    .card {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: border-color 0.15s;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+    .card.selected {
+      border-color: rgba(255, 41, 71, 0.35);
+    }
+    .card:active { background: rgba(0, 0, 0, 0.02); }
+
+    .card__flag {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+
+    .card__info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+    }
+    .card__label {
+      font-family: Montserrat, sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 20px;
+      color: #121E6C;
+    }
+
+    /* Radio button */
+    .radio {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #D9D9D9;
+      background: #FFFFFF;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s;
+    }
+    .radio.selected {
+      border-color: #FF2947;
+    }
+    .radio.selected::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #FF2947;
+    }
+
+    /* ══════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════ */
+    .footer {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 0 16px 20px;
+    }
+
+    .action-bar {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-back {
+      background: none;
+      border: none;
+      font-family: Montserrat, sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 20px;
+      color: #BABDD3;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      cursor: pointer;
+      padding: 12px 0;
+    }
+
+    .btn-continue {
+      height: 48px;
+      padding: 0 25px;
+      background: #FF2947;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 100px;
+      font-family: Montserrat, sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.02em;
+
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.15s;
+    }
+    .btn-continue:active { opacity: 0.85; }
+  </style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="status-bar">
+      <span class="status-bar__time">1:11 PM</span>
+      <div class="status-bar__right">
+        <svg width="17" height="11" viewBox="0 0 17 11" fill="none" aria-hidden="true">
+          <rect x="0"  y="7"    width="3.1" height="4"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="4"  y="5"    width="3.1" height="6"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="8"  y="3"    width="3.1" height="8"    rx="0.5" fill="#1E1E1E"/>
+          <rect x="12" y="0.5"  width="3.1" height="10.5" rx="0.5" fill="#1E1E1E"/>
+        </svg>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+          <circle cx="8" cy="10.5" r="1.3" fill="#1E1E1E"/>
+          <path d="M4.8 7.5C5.8 6.5 6.9 6 8 6s2.2.5 3.2 1.5"   stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          <path d="M2.2 5C3.7 3.4 5.8 2.5 8 2.5s4.3.9 5.8 2.5"  stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          <path d="M0 2.5C2.1.9 4.9 0 8 0s5.9.9 8 2.5"           stroke="#1E1E1E" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="status-bar__carrier">Carrier</span>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <div class="nav-left">
+        <button class="c-btn-close" onclick="window.location.href='../index.html?skip_location=true'" aria-label="Cerrar">
+          <img src="../components/ic_close.svg" width="24" height="24" alt="">
+        </button>
+      </div>
+      <div class="nav-center"></div>
+      <div class="nav-right"></div>
+    </div>
+  </div>
+
+  <!-- ── BODY ── -->
+  <div class="body">
+    <div class="text-section">
+      <h1 class="title">¿En qué país está ubicado tu negocio?</h1>
+      <p class="subtitle">Selecciona el país donde funciona tu negocio.</p>
+    </div>
+
+    <div class="card-list">
+
+      <!-- Colombia -->
+      <div class="card" id="card-colombia" onclick="selectCountry('colombia')" role="radio" aria-checked="false" tabindex="0">
+        <img class="card__flag" src="flag_colombia.svg" alt="Bandera Colombia">
+        <div class="card__info">
+          <span class="card__label">Colombia</span>
+        </div>
+        <div class="radio" id="radio-colombia"></div>
+      </div>
+
+      <!-- Perú — pre-selected -->
+      <div class="card selected" id="card-peru" onclick="selectCountry('peru')" role="radio" aria-checked="true" tabindex="0">
+        <img class="card__flag" src="flag_peru.svg" alt="Bandera Perú">
+        <div class="card__info">
+          <span class="card__label">Perú</span>
+        </div>
+        <div class="radio selected" id="radio-peru"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="action-bar">
+      <button class="c-btn-text" onclick="window.location.href='../index.html?skip_location=true'">Atrás</button>
+      <button class="c-btn-primary" id="btnContinuar" onclick="goNext()">Continuar</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let selected = 'peru';
+
+  function goNext() {
+    if (selected === 'peru') {
+      window.location.href = 'celular-correo.html';
+    } else {
+      alert('Esta demo solo está habilitada para Perú.');
+    }
+  }
+
+  function selectCountry(country) {
+    if (selected === country) return;
+    selected = country;
+
+    ['colombia', 'peru'].forEach(c => {
+      const card  = document.getElementById('card-' + c);
+      const radio = document.getElementById('radio-' + c);
+      const isSelected = c === country;
+      card.classList.toggle('selected', isSelected);
+      card.setAttribute('aria-checked', isSelected);
+      radio.classList.toggle('selected', isSelected);
+    });
+  }
+</script>
+
+</body>
+</html>

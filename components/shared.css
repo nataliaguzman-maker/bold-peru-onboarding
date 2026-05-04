@@ -1,0 +1,321 @@
+/* ═══════════════════════════════════════════════════════
+   Bold Perú Onboarding — Shared Components
+   Import with: <link rel="stylesheet" href="../components/shared.css">
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Título de pantallas de input text
+   Usage: <h1 class="c-screen-title">Texto</h1>  ── */
+.c-screen-title {
+  font-family: Montserrat, sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  color: #1E1E1E;
+}
+
+/* ── Primary button (Continuar, Siguiente, etc.)
+   Usage: <button class="c-btn-primary">Continuar</button>  ── */
+.c-btn-primary {
+  height: 48px;
+  padding: 0 25px;
+  background: #FF2947;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 100px;
+  font-family: Montserrat, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s;
+}
+.c-btn-primary:active  { opacity: 0.85; }
+.c-btn-primary:disabled {
+  background: #F48990;
+  cursor: default;
+  opacity: 1;
+}
+
+/* ── Secondary text button (Atrás)
+   Usage: <button class="c-btn-text">Atrás</button>  ── */
+.c-btn-text {
+  background: none;
+  border: none;
+  font-family: Montserrat, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  color: #BABDD3;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  padding: 12px 0;
+}
+
+/* ═══════════════════════════════════════════════════════
+   INPUT ERROR STATES
+   Tokens from Figma: fill_2L0Q1H / fill_O90P0W → #910022
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Wrapper for any input that needs an inline icon (error / check)
+   Usage: <div class="c-input-wrap"> <input> <span class="c-input-icon">...</span> </div>  ── */
+.c-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+.c-input-wrap input {
+  min-width: 0;
+  padding-right: 40px;   /* room for icon */
+}
+.c-input-icon {
+  position: absolute;
+  right: 10px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+.c-input-icon.c-visible { display: flex; }
+
+/* ── Error border — applies to <input> or any box (country-code, etc.)
+   Token: stroke #910022, 1px, radius stays at 12px
+   Usage: add .c-field-error to the input element  ── */
+.c-field-error {
+  border: 1px solid #910022 !important;
+  outline: none;
+}
+
+/* ── Phone: error also highlights the country-code pill
+   Usage: add .c-country-error to the .country-code div  ── */
+.c-country-error {
+  border: 1px solid #910022 !important;
+}
+
+/* ── Error helper text below the field group
+   Token: Montserrat Regular 14px/20px, color #910022
+   Usage: <p class="c-error-msg" id="…">message</p>  ── */
+.c-error-msg {
+  font-family: Montserrat, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #910022;
+  display: none;
+}
+.c-error-msg.c-visible { display: block; }
+
+/* ── Close / X icon button
+   Usage: <button class="c-btn-close"><img src="../components/ic_close.svg" ...></button>  ── */
+.c-btn-close {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Botón Atrás activo (pantallas regulares, no checkpoint)
+   Usage: <button class="c-btn-text c-btn-text--active">Atrás</button>  ── */
+.c-btn-text--active {
+  color: #121E6C;
+  cursor: pointer;
+}
+
+/* ── Item seleccionable nivel 0
+   Bloque full-width con texto centrado; radio pill 100px; 52px de alto.
+   Default: fondo blanco, sin borde, texto #1E1E1E Medium.
+   Seleccionado: borde 1px #FF2947, texto rojo Bold.
+   Solo un item activo a la vez — gestionado por JS (selectItem helper).
+   Usage:
+     <button class="c-sel-item" data-value="valor">Texto</button>
+     JS: selectItem(el, '.c-sel-item')  ── */
+.c-sel-item {
+  width: 100%;
+  height: 52px;
+  padding: 0 12px;
+  border-radius: 100px;
+  background: #FFFFFF;
+  border: 1px solid transparent;
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  color: #1E1E1E;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, font-weight 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.c-sel-item--selected {
+  border-color: #FF2947;
+  color: rgba(255, 41, 71, 0.93);
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════
+   INPUT / FORM COMPONENTS
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Form group: label + field stacked with 4px gap
+   Usage: <div class="c-form-group"> <label> <input> </div>  ── */
+.c-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ── Input label
+   Usage: <label class="c-input-label" for="…">Número de DNI</label>  ── */
+.c-input-label {
+  font-family: Montserrat, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #121E6C;
+}
+
+/* ── Text input field
+   Usage: <input class="c-input-field" type="text" …>  ── */
+.c-input-field {
+  width: 100%;
+  height: 48px;
+  padding: 12px 8px 12px 12px;
+  background: #FFFFFF;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #1E1E1E;
+  outline: none;
+  -webkit-appearance: none;
+}
+.c-input-field::placeholder {
+  font-weight: 400;
+  color: #606060;
+}
+
+/* Focus state — via browser :focus (programmatic) or JS class */
+.c-input-field:focus,
+.c-input-field--active {
+  border-color: #121E6C;
+}
+
+/* Filled-disabled state — field has value but is not editable
+   Figma: background #FFFFFF, opacity 0.5 on the whole field component
+   Usage: add .c-input-field--filled-disabled to the input  ── */
+.c-input-field--filled-disabled {
+  background: #FFFFFF !important;
+  border-color: transparent !important;
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ── Custom checkbox row
+   Usage:
+     <label class="c-checkbox-label">
+       <input type="checkbox" class="c-checkbox-native">
+       <span class="c-checkbox-visual"><span class="c-checkbox-mark"></span></span>
+       Texto de la opción
+     </label>  ── */
+.c-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: Montserrat, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #1E1E1E;
+  -webkit-tap-highlight-color: transparent;
+}
+.c-checkbox-native {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.c-checkbox-visual {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1.5px solid #D2D4E1;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s, border-color 0.1s;
+}
+.c-checkbox-native:checked + .c-checkbox-visual {
+  background: #FF2947;
+  border-color: #FF2947;
+}
+.c-checkbox-mark {
+  display: none;
+  width: 11px;
+  height: 7px;
+  border-left: 2px solid #FFFFFF;
+  border-bottom: 2px solid #FFFFFF;
+  transform: rotate(-45deg) translateY(-1px);
+}
+.c-checkbox-native:checked + .c-checkbox-visual .c-checkbox-mark {
+  display: block;
+}
+
+/* ── Info alert (blue)
+   Usage:
+     <div class="c-alert-info">
+       <svg …></svg>
+       <p class="c-alert-info__text">Mensaje</p>
+     </div>  ── */
+.c-alert-info {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 16px;
+}
+.c-alert-info__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: #227AD1;
+}
+.c-alert-info__text {
+  font-family: Montserrat, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #1E1E1E;
+}
+
+/* ── Checkpoint background (fase-2 y siguientes)
+   Usage: añadir clase .c-phone--checkpoint al div.phone  ── */
+.c-phone--checkpoint {
+  background:
+    linear-gradient(0deg, rgba(247, 248, 251, 0.20) 0%, rgba(247, 248, 251, 0.20) 100%),
+    linear-gradient(162deg, rgba(8, 14, 255, 0.10) 0%, rgba(255, 255, 255, 0.03) 50.96%, rgba(8, 14, 255, 0.20) 100%),
+    #FFFFFF;
+  box-shadow: 1px 1px 16.1px 0px rgba(18, 30, 108, 0.10) inset;
+  backdrop-filter: blur(18.2px);
+  -webkit-backdrop-filter: blur(18.2px);
+}
