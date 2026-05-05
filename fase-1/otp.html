@@ -31,7 +31,7 @@
       position: relative;
     }
 
-    .header, .body, .footer, .keyboard, .ayuda-btn {
+    .header, .body, .footer, .ayuda-btn {
       position: relative;
       z-index: 1;
     }
@@ -123,31 +123,18 @@
       border-radius: 12px;
       border: 1px solid #D2D4E1;
       background: #FFFFFF;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       flex-shrink: 0;
+      text-align: center;
+      font-family: Montserrat, sans-serif;
+      font-weight: 600; font-size: 20px;
+      color: #1E1E1E;
+      outline: none;
+      -webkit-appearance: none;
+      caret-color: #121E6C;
       transition: border-color 0.15s;
     }
-    .pin-box--active {
+    .pin-box:focus {
       border: 1.5px solid #121E6C;
-    }
-    .pin-box--active::after {
-      content: '';
-      width: 1.5px; height: 22px;
-      background: #121E6C;
-      border-radius: 1px;
-      animation: pin-blink 1.1s step-end infinite;
-    }
-    @keyframes pin-blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-    .pin-box--filled::after {
-      content: '';
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: #1E1E1E;
     }
 
     /* ── WEB/APP Alert – Status=Info ── */
@@ -228,44 +215,6 @@
     }
     .btn-text-navy:active { opacity: 0.7; }
 
-        .kb-numeric {
-      flex-shrink: 0; width: 100%; height: 290px;
-      background: #D1D3D9; position: relative; overflow: hidden;
-    }
-    .kb-num-rows {
-      position: absolute; left: 3px; right: 3px; top: 6px;
-      display: flex; flex-direction: column; gap: 12px;
-    }
-    .kb-num-row { display: flex; gap: 6px; }
-    .kb-num-key {
-      flex: 1; height: 55px;
-      background: #FFFFFF; border-radius: 4.6px;
-      box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.30);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      cursor: pointer; user-select: none; gap: 1px;
-      font-family: -apple-system, 'Helvetica Neue', sans-serif;
-      font-size: 22px; font-weight: 300; color: #000;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .kb-num-key:active { background: #ACB0BD; }
-    .kb-num-key__sub {
-      font-size: 9px; font-weight: 500; letter-spacing: 0.08em;
-      color: #000; line-height: 1;
-    }
-    .kb-num-key--special {
-      background: #ACB0BE; box-shadow: none;
-    }
-    .kb-num-key--special:active { background: #888D9A; }
-    .kb-num-key--empty {
-      background: #D1D3D9; box-shadow: none; pointer-events: none;
-    }
-
-    .kb-home {
-      position: absolute; bottom: 8px; left: 50%;
-      transform: translateX(-50%);
-      width: 134px; height: 5px;
-      background: #1C1C1E; border-radius: 3px; opacity: 0.18;
-    }
 
     /* ══════════════════════════════════════
        AYUDA floating button
@@ -467,12 +416,12 @@
 
     <!-- 6 OTP boxes -->
     <div class="pin-row" id="pinRow">
-      <div class="pin-box" id="pin-0"></div>
-      <div class="pin-box" id="pin-1"></div>
-      <div class="pin-box" id="pin-2"></div>
-      <div class="pin-box" id="pin-3"></div>
-      <div class="pin-box" id="pin-4"></div>
-      <div class="pin-box" id="pin-5"></div>
+      <input class="pin-box" id="pin-0" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Dígito 1">
+      <input class="pin-box" id="pin-1" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Dígito 2">
+      <input class="pin-box" id="pin-2" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Dígito 3">
+      <input class="pin-box" id="pin-3" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Dígito 4">
+      <input class="pin-box" id="pin-4" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Dígito 5">
+      <input class="pin-box" id="pin-5" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Dígito 6">
     </div>
 
     <!-- WEB/APP Alert – Info -->
@@ -504,38 +453,6 @@
       <button class="btn-text-navy"
               onclick="deleteKey()">Borrar</button>
     </div>
-  </div>
-
-  <!-- ── iOS NUMERIC KEYBOARD ── -->
-  <div class="kb-numeric" aria-hidden="true">
-    <div class="kb-num-rows">
-      <div class="kb-num-row">
-        <div class="kb-num-key" onclick="typeKey('1')">1<span class="kb-num-key__sub">&nbsp;</span></div>
-        <div class="kb-num-key" onclick="typeKey('2')">2<span class="kb-num-key__sub">ABC</span></div>
-        <div class="kb-num-key" onclick="typeKey('3')">3<span class="kb-num-key__sub">DEF</span></div>
-      </div>
-      <div class="kb-num-row">
-        <div class="kb-num-key" onclick="typeKey('4')">4<span class="kb-num-key__sub">GHI</span></div>
-        <div class="kb-num-key" onclick="typeKey('5')">5<span class="kb-num-key__sub">JKL</span></div>
-        <div class="kb-num-key" onclick="typeKey('6')">6<span class="kb-num-key__sub">MNO</span></div>
-      </div>
-      <div class="kb-num-row">
-        <div class="kb-num-key" onclick="typeKey('7')">7<span class="kb-num-key__sub">PQRS</span></div>
-        <div class="kb-num-key" onclick="typeKey('8')">8<span class="kb-num-key__sub">TUV</span></div>
-        <div class="kb-num-key" onclick="typeKey('9')">9<span class="kb-num-key__sub">WXYZ</span></div>
-      </div>
-      <div class="kb-num-row">
-        <div class="kb-num-key kb-num-key--empty"></div>
-        <div class="kb-num-key" onclick="typeKey('0')">0</div>
-        <div class="kb-num-key kb-num-key--special" onclick="deleteKey()">
-          <svg width="20" height="15" viewBox="0 0 24 18" fill="none">
-            <path d="M9.5 1H21C22.1 1 23 1.9 23 3V15C23 16.1 22.1 17 21 17H9.5C8.9 17 8.3 16.7 7.9 16.2L1.5 9L7.9 1.8C8.3 1.3 8.9 1 9.5 1Z" fill="none" stroke="#3C3C43" stroke-width="1.2" stroke-opacity="0.6"/>
-            <path d="M15 6L11 12M11 6L15 12" stroke="#3C3C43" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-    <div class="kb-home"></div>
   </div>
 
   <!-- ── AYUDA floating button ── -->
@@ -606,47 +523,46 @@
   document.getElementById('subtitleText').textContent =
     `Ingresa el código que enviamos por SMS al ${formatPhone(phone)}.`;
 
-  /* ── OTP state ── */
-  let otpValue = '';
+  /* ── OTP inputs ── */
+  const pinInputs = Array.from(document.querySelectorAll('.pin-box'));
 
-  function updateDisplay() {
-    const p = otpValue;
-    const boxes = document.querySelectorAll('.pin-box');
-    boxes.forEach((box, i) => {
-      box.classList.remove('pin-box--active', 'pin-box--filled');
-      if (i < p.length) {
-        box.classList.add('pin-box--filled');
-      } else if (i === p.length) {
-        box.classList.add('pin-box--active');
+  pinInputs.forEach(function(input, i) {
+    input.addEventListener('input', function() {
+      const val = this.value.replace(/\D/g, '');
+      this.value = val ? val[val.length - 1] : '';
+      if (this.value && i < 5) {
+        pinInputs[i + 1].focus();
+      }
+      checkComplete();
+    });
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && !this.value && i > 0) {
+        pinInputs[i - 1].value = '';
+        pinInputs[i - 1].focus();
       }
     });
-  }
+  });
 
-  function typeKey(digit) {
-    if (otpValue.length >= 6) return;
-    otpValue += digit;
-    updateDisplay();
-    if (otpValue.length === 6) {
-      /* Any 6-digit code is valid in this prototype */
-      setTimeout(() => {
+  function checkComplete() {
+    const code = pinInputs.map(function(inp) { return inp.value; }).join('');
+    if (code.length === 6) {
+      setTimeout(function() {
         window.location.href = 'biometria.html';
       }, 120);
     }
   }
 
   function deleteKey() {
-    if (otpValue.length > 0) {
-      otpValue = otpValue.slice(0, -1);
-      updateDisplay();
+    for (var i = 5; i >= 0; i--) {
+      if (pinInputs[i].value) {
+        pinInputs[i].value = '';
+        pinInputs[i].focus();
+        return;
+      }
     }
+    pinInputs[0].focus();
   }
-
-  /* Physical keyboard support for desktop testing (only when sheet is closed) */
-  document.addEventListener('keydown', e => {
-    if (document.getElementById('editPhoneOverlay').classList.contains('bs-open')) return;
-    if (e.key >= '0' && e.key <= '9') typeKey(e.key);
-    else if (e.key === 'Backspace') deleteKey();
-  });
 
   /* ── Countdown timer ── */
   let timerSecs = 60;
@@ -672,7 +588,7 @@
   }
 
   window.addEventListener('load', () => {
-    updateDisplay();
+    pinInputs[0].focus();
     startCountdown();
   });
 
