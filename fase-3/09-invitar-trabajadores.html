@@ -744,7 +744,7 @@
   var btnGuardar     = document.getElementById('btnGuardar');
 
   function isEmailValid(v) {
-    return /@(gmail|hotmail|yahoo)\.com$/i.test(v.trim());
+    return /^[^\s@]+@[^\s@]+\.(com|co)$/i.test(v.trim());
   }
 
   function openModal() {
