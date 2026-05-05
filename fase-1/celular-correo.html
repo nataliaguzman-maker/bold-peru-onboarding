@@ -376,7 +376,7 @@
             <img src="../components/ic_error.svg" width="24" height="24" alt="">
           </span>
         </div>
-        <p class="c-error-msg" id="emailErrorMsg">Ingresa un correo @gmail.com, @hotmail.com o @yahoo.com.</p>
+        <p class="c-error-msg" id="emailErrorMsg">Ingresa un correo válido</p>
       </div>
 
       <!-- Checkboxes de consentimiento -->
@@ -491,7 +491,7 @@
     return /^9\d{8,}$/.test(v.replace(/\s/g, ''));
   }
   function isEmailValid(v) {
-    return /@(gmail|hotmail|yahoo)\.com$/i.test(v.trim());
+    return /^[^\s@]+@[^\s@]+\.(com|co)$/i.test(v.trim());
   }
 
   function validate() {
