@@ -494,12 +494,7 @@
     }
   });
 
-  /* Pre-fill from localStorage, then auto-focus phone */
   window.addEventListener('load', () => {
-    const savedPhone = localStorage.getItem('celular');
-    const savedEmail = localStorage.getItem('correo');
-    if (savedPhone) phoneInput.value = savedPhone;
-    if (savedEmail) emailInput.value = savedEmail;
     phoneInput.focus();
     validate();
   });

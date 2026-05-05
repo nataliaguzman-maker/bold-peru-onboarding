@@ -466,7 +466,7 @@
         <div class="footer">
           <p class="headline">Ahorra, crece y mueve tu dinero sin condiciones</p>
           <div class="btn-cluster">
-            <button class="btn btn--secondary" onclick="window.location.href='fase-1/index.html'">Registrarme</button>
+            <button class="btn btn--secondary" onclick="registrarme()">Registrarme</button>
             <button class="btn btn--primary">Ingresar</button>
           </div>
         </div>
@@ -564,6 +564,17 @@
     setTimeout(() => {
       document.getElementById('iosOverlay').classList.add('visible');
     }, 3000);
+  }
+
+  function registrarme() {
+    ['celular','correo','tipo_documento','numero_documento','nombres','apellidos',
+     'departamento','provincia','distrito','direccion','detalles_direccion',
+     'nombre_negocio','formas_venta','tamano_equipo','correo_negocio','numero_negocio',
+     'departamento_negocio','provincia_negocio','distrito_negocio','direccion_negocio',
+     'detalles_direccion_negocio','ventas_esperadas','actividad_negocio',
+     'banco_seleccionado','tipo_cuenta','numero_cuenta','trabajadores'
+    ].forEach(k => localStorage.removeItem(k));
+    window.location.href = 'fase-1/index.html';
   }
 
   function dismissModal() {
