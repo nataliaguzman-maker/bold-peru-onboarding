@@ -313,11 +313,11 @@
 
   function checkForm() {
     const n = rawDigits ? parseInt(rawDigits, 10) : 0;
-    document.getElementById('btnContinuar').disabled = n < 100000;
+    document.getElementById('btnContinuar').disabled = n < 100;
   }
 
   function goNext() {
-    if (!rawDigits || parseInt(rawDigits, 10) < 100000) return;
+    if (!rawDigits || parseInt(rawDigits, 10) < 100) return;
     localStorage.setItem('ventas_esperadas', rawDigits);
     window.location.href = '07-actividad-economica.html';
   }
