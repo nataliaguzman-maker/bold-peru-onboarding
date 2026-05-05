@@ -205,51 +205,6 @@
       width: 100%;
     }
 
-    /* ══ EMAIL KEYBOARD ══ */
-    .kb-email {
-      flex-shrink: 0;
-      width: 100%; height: 208px;
-      background: #D1D3D9;
-      position: relative; overflow: hidden;
-    }
-    .kb-email-rows {
-      position: absolute;
-      left: 3px; right: 3px; top: 6px;
-      display: flex; flex-direction: column;
-      gap: 6px;
-    }
-    .kb-email-row { display: flex; gap: 6px; }
-    .kb-email-row--mid { padding: 0 22px; }
-    .kb-ltr {
-      flex: 1; height: 42px; min-width: 0;
-      background: #FFFFFF; border-radius: 4.6px;
-      box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.30);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; user-select: none;
-      font-family: -apple-system, 'Helvetica Neue', sans-serif;
-      font-size: 17px; font-weight: 400; color: #000;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .kb-ltr:active { background: #ACB0BD; }
-    .kb-ltr--special {
-      flex: 0 0 44px;
-      background: #ACB0BE; box-shadow: none; font-size: 13px;
-    }
-    .kb-ltr--special:active { background: #888D9A; }
-    .kb-ltr--sm   { flex: 0 0 40px; }
-    .kb-ltr--space { flex: 3; font-size: 15px; }
-    .kb-ltr--return {
-      flex: 0 0 70px;
-      background: #ACB0BE; box-shadow: none; font-size: 14px;
-    }
-    .kb-ltr--return:active { background: #888D9A; }
-    .kb-home {
-      position: absolute; bottom: 4px; left: 50%;
-      transform: translateX(-50%);
-      width: 134px; height: 5px;
-      background: #1C1C1E; border-radius: 3px; opacity: 0.18;
-    }
-
     .modal-header {
       display: flex;
       justify-content: center;
@@ -547,75 +502,17 @@
         <label class="c-input-label" for="workerEmail">Trabajador</label>
         <input
           id="workerEmail"
-          class="c-input-field c-input-field--active"
-          type="text"
-          inputmode="none"
+          class="c-input-field"
+          type="email"
+          autocapitalize="none"
+          autocorrect="off"
           placeholder="correocolab@gmail.com"
           autocomplete="off"
-          readonly
+          oninput="btnGuardar.disabled = !isEmailValid(this.value)"
         >
       </div>
       <p class="modal-helper">Configura los permisos en el siguiente paso.</p>
       <button class="c-btn-primary modal-btn-guardar" id="btnGuardar" disabled>Guardar</button>
-    </div>
-
-    <!-- QWERTY keyboard -->
-    <div class="kb-email" id="kbEmail" aria-hidden="true">
-      <div class="kb-email-rows">
-
-        <!-- Row 1: q w e r t y u i o p -->
-        <div class="kb-email-row">
-          <div class="kb-ltr" onclick="typeKey('q')">q</div>
-          <div class="kb-ltr" onclick="typeKey('w')">w</div>
-          <div class="kb-ltr" onclick="typeKey('e')">e</div>
-          <div class="kb-ltr" onclick="typeKey('r')">r</div>
-          <div class="kb-ltr" onclick="typeKey('t')">t</div>
-          <div class="kb-ltr" onclick="typeKey('y')">y</div>
-          <div class="kb-ltr" onclick="typeKey('u')">u</div>
-          <div class="kb-ltr" onclick="typeKey('i')">i</div>
-          <div class="kb-ltr" onclick="typeKey('o')">o</div>
-          <div class="kb-ltr" onclick="typeKey('p')">p</div>
-        </div>
-
-        <!-- Row 2: a s d f g h j k l (centered) -->
-        <div class="kb-email-row kb-email-row--mid">
-          <div class="kb-ltr" onclick="typeKey('a')">a</div>
-          <div class="kb-ltr" onclick="typeKey('s')">s</div>
-          <div class="kb-ltr" onclick="typeKey('d')">d</div>
-          <div class="kb-ltr" onclick="typeKey('f')">f</div>
-          <div class="kb-ltr" onclick="typeKey('g')">g</div>
-          <div class="kb-ltr" onclick="typeKey('h')">h</div>
-          <div class="kb-ltr" onclick="typeKey('j')">j</div>
-          <div class="kb-ltr" onclick="typeKey('k')">k</div>
-          <div class="kb-ltr" onclick="typeKey('l')">l</div>
-        </div>
-
-        <!-- Row 3: ⇧ z x c v b n m ⌫ -->
-        <div class="kb-email-row">
-          <div class="kb-ltr kb-ltr--special kb-ltr--sm" onclick="void(0)" aria-label="Mayúsculas">⇧</div>
-          <div class="kb-ltr" onclick="typeKey('z')">z</div>
-          <div class="kb-ltr" onclick="typeKey('x')">x</div>
-          <div class="kb-ltr" onclick="typeKey('c')">c</div>
-          <div class="kb-ltr" onclick="typeKey('v')">v</div>
-          <div class="kb-ltr" onclick="typeKey('b')">b</div>
-          <div class="kb-ltr" onclick="typeKey('n')">n</div>
-          <div class="kb-ltr" onclick="typeKey('m')">m</div>
-          <div class="kb-ltr kb-ltr--special kb-ltr--sm" onclick="deleteKey()" aria-label="Borrar">⌫</div>
-        </div>
-
-        <!-- Row 4: 123 | @ | _ | space | . | - | return -->
-        <div class="kb-email-row">
-          <div class="kb-ltr kb-ltr--special" onclick="void(0)">123</div>
-          <div class="kb-ltr kb-ltr--sm" onclick="typeKey('@')">@</div>
-          <div class="kb-ltr kb-ltr--sm" onclick="typeKey('_')">_</div>
-          <div class="kb-ltr kb-ltr--space" onclick="typeKey(' ')">espacio</div>
-          <div class="kb-ltr kb-ltr--sm" onclick="typeKey('.')">.</div>
-          <div class="kb-ltr kb-ltr--sm" onclick="typeKey('-')">-</div>
-          <div class="kb-ltr kb-ltr--return" onclick="closeModal()">return</div>
-        </div>
-
-      </div>
-      <div class="kb-home"></div>
     </div>
 
   </div>
@@ -751,20 +648,11 @@
     inputEmail.value = '';
     btnGuardar.disabled = true;
     modalContainer.classList.add('modal-container--visible');
+    setTimeout(function() { inputEmail.focus(); }, 50);
   }
 
   function closeModal() {
     modalContainer.classList.remove('modal-container--visible');
-  }
-
-  function typeKey(char) {
-    inputEmail.value += char;
-    btnGuardar.disabled = !isEmailValid(inputEmail.value);
-  }
-
-  function deleteKey() {
-    inputEmail.value = inputEmail.value.slice(0, -1);
-    btnGuardar.disabled = !isEmailValid(inputEmail.value);
   }
 
   // ── Access bottomsheet ──
