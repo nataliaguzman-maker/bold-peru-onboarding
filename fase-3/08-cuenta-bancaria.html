@@ -244,50 +244,6 @@
     }
     .ayuda-btn__icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
 
-    /* ══ CUSTOM QWERTY KEYBOARD ══ */
-    .keyboard {
-      flex-shrink: 0; width: 100%; height: 290px;
-      background: #D1D3D9; position: relative; overflow: hidden;
-      display: none;
-    }
-    .keyboard--visible { display: block; }
-    .kb-rows {
-      position: absolute; left: 3px; right: 3px; top: 6px;
-      display: flex; flex-direction: column; gap: 13px;
-    }
-    .kb-row { display: flex; flex-direction: row; width: 100%; gap: 6px; }
-    .kb-ltr {
-      flex: 1; height: 46px; min-width: 0;
-      background: #FFFFFF; border-radius: 4.6px;
-      box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.30);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; user-select: none;
-      font-family: -apple-system, 'Helvetica Neue', sans-serif;
-      font-size: 17px; font-weight: 400; color: #000;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .kb-ltr:active { background: #ACB0BD; }
-    .kb-ltr--special {
-      flex: 0 0 44px; background: #ACB0BE; box-shadow: none; font-size: 13px;
-    }
-    .kb-ltr--special:active { background: #888D9A; }
-    .kb-row--mid { padding: 0 22px; }
-    .kb-ltr--space { flex: 4; font-size: 15px; }
-    .kb-ltr--return {
-      flex: 0 0 80px; background: #ACB0BE; box-shadow: none; font-size: 15px;
-    }
-    .kb-ltr--return:active { background: #888D9A; }
-    .kb-ltr--mode { flex: 0 0 44px; font-size: 13px; }
-    .kb-ltr--shift-on {
-      background: #FFFFFF !important;
-      box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.30) !important;
-    }
-    .kb-home {
-      position: absolute; bottom: 8px; left: 50%;
-      transform: translateX(-50%);
-      width: 134px; height: 5px;
-      background: #1C1C1E; border-radius: 3px; opacity: 0.18;
-    }
   </style>
 </head>
 <body>
@@ -390,13 +346,12 @@
           id="inputCuenta"
           class="c-input-field"
           type="text"
-          inputmode="none"
+          inputmode="text"
           placeholder="Escribe el número de tu cuenta"
           autocomplete="off"
           autocapitalize="none"
           autocorrect="off"
-          readonly
-          onclick="showKb()"
+          oninput="checkForm()"
         >
       </div>
 
@@ -417,116 +372,6 @@
       <button class="c-btn-primary btn-continuar" id="btnContinuar"
               disabled onclick="goNext()">Continuar</button>
     </div>
-  </div>
-
-  <!-- ── CUSTOM QWERTY KEYBOARD ── -->
-  <div class="keyboard" id="kbCuenta" aria-hidden="true">
-
-    <!-- VISTA LETRAS (default) -->
-    <div class="kb-rows" id="kbLetters">
-      <!-- Fila 1: Q W E R T Y U I O P -->
-      <div class="kb-row">
-        <div class="kb-ltr" onclick="typeKey('q')">q</div>
-        <div class="kb-ltr" onclick="typeKey('w')">w</div>
-        <div class="kb-ltr" onclick="typeKey('e')">e</div>
-        <div class="kb-ltr" onclick="typeKey('r')">r</div>
-        <div class="kb-ltr" onclick="typeKey('t')">t</div>
-        <div class="kb-ltr" onclick="typeKey('y')">y</div>
-        <div class="kb-ltr" onclick="typeKey('u')">u</div>
-        <div class="kb-ltr" onclick="typeKey('i')">i</div>
-        <div class="kb-ltr" onclick="typeKey('o')">o</div>
-        <div class="kb-ltr" onclick="typeKey('p')">p</div>
-      </div>
-      <!-- Fila 2: A S D F G H J K L Ñ (10 teclas, sin indent) -->
-      <div class="kb-row">
-        <div class="kb-ltr" onclick="typeKey('a')">a</div>
-        <div class="kb-ltr" onclick="typeKey('s')">s</div>
-        <div class="kb-ltr" onclick="typeKey('d')">d</div>
-        <div class="kb-ltr" onclick="typeKey('f')">f</div>
-        <div class="kb-ltr" onclick="typeKey('g')">g</div>
-        <div class="kb-ltr" onclick="typeKey('h')">h</div>
-        <div class="kb-ltr" onclick="typeKey('j')">j</div>
-        <div class="kb-ltr" onclick="typeKey('k')">k</div>
-        <div class="kb-ltr" onclick="typeKey('l')">l</div>
-        <div class="kb-ltr" onclick="typeKey('ñ')">ñ</div>
-      </div>
-      <!-- Fila 3: ⇧ + Z X C V B N M + ⌫ -->
-      <div class="kb-row">
-        <div class="kb-ltr kb-ltr--special" id="kbShift" onclick="toggleShift()">⇧</div>
-        <div class="kb-ltr" onclick="typeKey('z')">z</div>
-        <div class="kb-ltr" onclick="typeKey('x')">x</div>
-        <div class="kb-ltr" onclick="typeKey('c')">c</div>
-        <div class="kb-ltr" onclick="typeKey('v')">v</div>
-        <div class="kb-ltr" onclick="typeKey('b')">b</div>
-        <div class="kb-ltr" onclick="typeKey('n')">n</div>
-        <div class="kb-ltr" onclick="typeKey('m')">m</div>
-        <div class="kb-ltr kb-ltr--special" onclick="deleteKey()">
-          <svg width="20" height="15" viewBox="0 0 24 18" fill="none">
-            <path d="M9.5 1H21C22.1 1 23 1.9 23 3V15C23 16.1 22.1 17 21 17H9.5C8.9 17 8.3 16.7 7.9 16.2L1.5 9L7.9 1.8C8.3 1.3 8.9 1 9.5 1Z" fill="none" stroke="#3C3C43" stroke-width="1.2" stroke-opacity="0.6"/>
-            <path d="M15 6L11 12M11 6L15 12" stroke="#3C3C43" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6"/>
-          </svg>
-        </div>
-      </div>
-      <!-- Fila 4: 123 | espacio | intro -->
-      <div class="kb-row">
-        <div class="kb-ltr kb-ltr--special kb-ltr--mode" onclick="showNumbers()">123</div>
-        <div class="kb-ltr kb-ltr--space" onclick="typeKey(' ')">espacio</div>
-        <div class="kb-ltr kb-ltr--return" onclick="hideKb()">intro</div>
-      </div>
-    </div>
-
-    <!-- VISTA NÚMEROS -->
-    <div class="kb-rows" id="kbNumbers" style="display:none">
-      <!-- Fila 1: 1 2 3 4 5 6 7 8 9 0 -->
-      <div class="kb-row">
-        <div class="kb-ltr" onclick="typeKey('1')">1</div>
-        <div class="kb-ltr" onclick="typeKey('2')">2</div>
-        <div class="kb-ltr" onclick="typeKey('3')">3</div>
-        <div class="kb-ltr" onclick="typeKey('4')">4</div>
-        <div class="kb-ltr" onclick="typeKey('5')">5</div>
-        <div class="kb-ltr" onclick="typeKey('6')">6</div>
-        <div class="kb-ltr" onclick="typeKey('7')">7</div>
-        <div class="kb-ltr" onclick="typeKey('8')">8</div>
-        <div class="kb-ltr" onclick="typeKey('9')">9</div>
-        <div class="kb-ltr" onclick="typeKey('0')">0</div>
-      </div>
-      <!-- Fila 2: - / : ; ( ) $ & @ " -->
-      <div class="kb-row">
-        <div class="kb-ltr" onclick="typeKey('-')">-</div>
-        <div class="kb-ltr" onclick="typeKey('/')">/</div>
-        <div class="kb-ltr" onclick="typeKey(':')">:</div>
-        <div class="kb-ltr" onclick="typeKey(';')">;</div>
-        <div class="kb-ltr" onclick="typeKey('(')">(</div>
-        <div class="kb-ltr" onclick="typeKey(')')">)</div>
-        <div class="kb-ltr" onclick="typeKey('$')">$</div>
-        <div class="kb-ltr" onclick="typeKey('&')">&amp;</div>
-        <div class="kb-ltr" onclick="typeKey('@')">@</div>
-        <div class="kb-ltr" onclick="typeKey('&quot;')">"</div>
-      </div>
-      <!-- Fila 3: #+= | . , ? ! ' | ⌫ -->
-      <div class="kb-row">
-        <div class="kb-ltr kb-ltr--special kb-ltr--mode" onclick="void(0)">#+=</div>
-        <div class="kb-ltr" onclick="typeKey('.')">.</div>
-        <div class="kb-ltr" onclick="typeKey(',')">&#44;</div>
-        <div class="kb-ltr" onclick="typeKey('?')">?</div>
-        <div class="kb-ltr" onclick="typeKey('!')">!</div>
-        <div class="kb-ltr" onclick="typeKey(&quot;'&quot;)">'</div>
-        <div class="kb-ltr kb-ltr--special" onclick="deleteKey()">
-          <svg width="20" height="15" viewBox="0 0 24 18" fill="none">
-            <path d="M9.5 1H21C22.1 1 23 1.9 23 3V15C23 16.1 22.1 17 21 17H9.5C8.9 17 8.3 16.7 7.9 16.2L1.5 9L7.9 1.8C8.3 1.3 8.9 1 9.5 1Z" fill="none" stroke="#3C3C43" stroke-width="1.2" stroke-opacity="0.6"/>
-            <path d="M15 6L11 12M11 6L15 12" stroke="#3C3C43" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6"/>
-          </svg>
-        </div>
-      </div>
-      <!-- Fila 4: ABC | espacio | intro -->
-      <div class="kb-row">
-        <div class="kb-ltr kb-ltr--special kb-ltr--mode" onclick="showLetters()">ABC</div>
-        <div class="kb-ltr kb-ltr--space" onclick="typeKey(' ')">espacio</div>
-        <div class="kb-ltr kb-ltr--return" onclick="hideKb()">intro</div>
-      </div>
-    </div>
-
-    <div class="kb-home"></div>
   </div>
 
   <!-- ── BANCO BOTTOMSHEET ── -->
@@ -709,54 +554,6 @@
     if (e.target === document.getElementById(overlayId)) {
       document.getElementById(overlayId).classList.remove('is-open');
     }
-  }
-
-  /* ── Custom keyboard ── */
-  var inputCuenta = document.getElementById('inputCuenta');
-  var shiftActive = false;
-
-  function showKb() {
-    document.getElementById('kbCuenta').classList.add('keyboard--visible');
-    showLetters();
-    inputCuenta.classList.add('c-input-field--active');
-    setTimeout(function() {
-      inputCuenta.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 50);
-  }
-
-  function hideKb() {
-    document.getElementById('kbCuenta').classList.remove('keyboard--visible');
-  }
-
-  function showLetters() {
-    document.getElementById('kbLetters').style.display = '';
-    document.getElementById('kbNumbers').style.display = 'none';
-  }
-
-  function showNumbers() {
-    document.getElementById('kbLetters').style.display = 'none';
-    document.getElementById('kbNumbers').style.display = '';
-  }
-
-  function setShift(on) {
-    shiftActive = on;
-    document.getElementById('kbShift').classList.toggle('kb-ltr--shift-on', on);
-  }
-
-  function toggleShift() { setShift(!shiftActive); }
-
-  function typeKey(char) {
-    if (shiftActive && /[a-záéíóúüñ]/.test(char)) {
-      char = char.toUpperCase();
-      setShift(false);
-    }
-    inputCuenta.value += char;
-    checkForm();
-  }
-
-  function deleteKey() {
-    inputCuenta.value = inputCuenta.value.slice(0, -1);
-    checkForm();
   }
 
   /* ── Boot ── */
