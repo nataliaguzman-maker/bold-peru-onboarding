@@ -30,11 +30,20 @@
     /* ── Phone shell: 393 × 852 ── */
     .phone {
       width: 393px;
-      height: 852px;
+      height: 100dvh;
       background: #F7F8FB;
       overflow: hidden;
       display: flex;
       flex-direction: column;
+    }
+
+    @media (max-width: 430px) {
+      .phone {
+        width: 100%;
+        height: 100dvh;
+        border-radius: 0;
+        box-shadow: none;
+      }
     }
 
     /* ══════════════════════════════════════
@@ -120,6 +129,7 @@
        ══════════════════════════════════════ */
     .body {
       flex: 1;
+      height: 100%;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -227,6 +237,7 @@
        ══════════════════════════════════════ */
     .footer {
       flex-shrink: 0;
+      margin-top: auto;
       display: flex;
       flex-direction: column;
       gap: 20px;
